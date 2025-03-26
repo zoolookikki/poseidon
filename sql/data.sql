@@ -20,7 +20,7 @@ CREATE TABLE bid_lists (
   revision_date TIMESTAMP,
   deal_name VARCHAR(125),
   deal_type VARCHAR(125),
-  source_list_id VARCHAR(1
+  source_list_id VARCHAR(125),
   side VARCHAR(125),
 
   PRIMARY KEY (id)
