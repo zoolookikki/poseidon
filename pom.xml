@@ -77,6 +77,11 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<!-- pour aider IntelliJ pour qu'il reconnaisse les annotations => import -->
+		<dependency>
+			<groupId>jakarta.persistence</groupId>
+			<artifactId>jakarta.persistence-api</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
