@@ -28,9 +28,9 @@ public class RuleName {
     @Column(length = 512)
     private String template;
 
-    @Column(name = "sql_str", length = 125)
+    @Column(length = 125)
     private String sqlStr;
 
-    @Column(name = "sql_part", length = 125)
+    @Column(length = 125)
     private String sqlPart;
 }

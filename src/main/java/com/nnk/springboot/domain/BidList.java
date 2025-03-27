@@ -34,10 +34,8 @@ public class BidList {
     @NotBlank(message = "Type is mandatory")
     private String type;
 
-    @Column(name = "bid_quantity")
     private Double bidQuantity;
 
-    @Column(name = "ask_quantity")
     private Double askQuantity;
 
     private Double bid;
@@ -47,7 +45,6 @@ public class BidList {
     @Column(length = 125)
     private String benchmark;
 
-    @Column(name = "bid_list_date")
     private Instant bidListDate;
 
     @Column(length = 125)
@@ -65,25 +62,23 @@ public class BidList {
     @Column(length = 125)
     private String book;
 
-    @Column(name = "creation_name", length = 125)
+    @Column(length = 125)
     private String creationName;
 
-    @Column(name = "creation_date")
     private Instant creationDate;
 
-    @Column(name = "revision_name", length = 125)
+    @Column(length = 125)
     private String revisionName;
 
-    @Column(name = "revision_date")
     private Instant revisionDate;
 
-    @Column(name = "deal_name", length = 125)
+    @Column(length = 125)
     private String dealName;
 
-    @Column(name = "deal_type", length = 125)
+    @Column(length = 125)
     private String dealType;
 
-    @Column(name = "source_list_id", length = 125)
+    @Column(length = 125)
     private String sourceListId;
 
     @Column(length = 125)

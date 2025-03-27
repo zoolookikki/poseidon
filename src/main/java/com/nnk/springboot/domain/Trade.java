@@ -27,19 +27,14 @@ public class Trade {
     @NotBlank(message = "Type is mandatory")
     private String type;
 
-    @Column(name = "buy_quantity")
     private Double buyQuantity;
 
-    @Column(name = "sell_quantity")
     private Double sellQuantity;
 
-    @Column(name = "buy_price")
     private Double buyPrice;
 
-    @Column(name = "sell_price")
     private Double sellPrice;
 
-    @Column(name = "trade_date")
     private Instant tradeDate;
 
     @Column(length = 125)
@@ -57,25 +52,23 @@ public class Trade {
     @Column(length = 125)
     private String book;
 
-    @Column(name = "creation_name", length = 125)
+    @Column(length = 125)
     private String creationName;
 
-    @Column(name = "creation_date")
     private Instant creationDate;
 
-    @Column(name = "revision_name", length = 125)
+    @Column(length = 125)
     private String revisionName;
 
-    @Column(name = "revision_date")
     private Instant revisionDate;
 
-    @Column(name = "deal_name", length = 125)
+    @Column(length = 125)
     private String dealName;
 
-    @Column(name = "deal_type", length = 125)
+    @Column(length = 125)
     private String dealType;
 
-    @Column(name = "source_list_id", length = 125)
+    @Column(length = 125)
     private String sourceListId;
 
     @Column(length = 125)
