@@ -3,7 +3,7 @@ package com.nnk.springboot.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.security.Timestamp;
+import java.time.Instant;
 
 @Entity
 @Table(name = "curve_points")
@@ -22,12 +22,12 @@ public class CurvePoint {
     private Integer curveId;
 
     @Column(name = "as_of_date")
-    private Timestamp asOfDate;
+    private Instant asOfDate;
 
     private Double term;
 
     private Double value;
 
     @Column(name = "creation_date")
-    private Timestamp creationDate;
+    private Instant creationDate;
 }

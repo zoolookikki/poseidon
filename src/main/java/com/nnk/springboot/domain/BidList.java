@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-import java.security.Timestamp;
+import java.time.Instant;
 
 @Entity
 @Table(name = "bid_lists")
@@ -48,7 +48,7 @@ public class BidList {
     private String benchmark;
 
     @Column(name = "bid_list_date")
-    private Timestamp bidListDate;
+    private Instant bidListDate;
 
     @Column(length = 125)
     private String commentary;
@@ -69,13 +69,13 @@ public class BidList {
     private String creationName;
 
     @Column(name = "creation_date")
-    private Timestamp creationDate;
+    private Instant creationDate;
 
     @Column(name = "revision_name", length = 125)
     private String revisionName;
 
     @Column(name = "revision_date")
-    private Timestamp revisionDate;
+    private Instant revisionDate;
 
     @Column(name = "deal_name", length = 125)
     private String dealName;
