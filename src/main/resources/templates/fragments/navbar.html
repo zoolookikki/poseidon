@@ -1,11 +1,15 @@
-<div th:fragment="navbar" xmlns:th="http://www.w3.org/1999/xhtml">
-    <div class="row">
+<div th:fragment="navbar">
+     <div class="row">
         <div class="col-6">
             <a href="/bidList/list">Bid List</a>&nbsp;|&nbsp;
             <a href="/curvePoint/list">Curve Points</a>&nbsp;|&nbsp;
             <a href="/rating/list">Ratings</a>&nbsp;|&nbsp;
             <a href="/trade/list">Trade</a>&nbsp;|&nbsp;
             <a href="/ruleName/list">Rule</a>
+            <span th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                &nbsp;|&nbsp;
+                <a href="/user/list">User management</a>
+            </span>
         </div>
         <div class="col-6 text-right">
             Logged in user: <b class="user" th:text="${username}">User</b>

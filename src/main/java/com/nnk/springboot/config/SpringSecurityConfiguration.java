@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 /**
  * Configuring application security with Spring Security.
@@ -64,7 +63,7 @@ public class SpringSecurityConfiguration {
                     Autoriser l'accès à la racine et à la page de login sans authentification.
                     Autoriser les fichiers statiques.
                     */
-                    auth.requestMatchers("/","/login", "/favicon.ico", "/images/**", "/css/**", "/js/**").permitAll();
+                    auth.requestMatchers("/login", "/favicon.ico", "/images/**", "/css/**", "/js/**").permitAll();
                     // Seuls les utilisateurs ayant le rôle ADMIN peuvent y accéder.
                     auth.requestMatchers("/user/**").hasRole("ADMIN");
                     /*
@@ -77,14 +76,11 @@ public class SpringSecurityConfiguration {
                 .formLogin(form -> form
                         // pour plus tard, pour le moment utilisation de la page par défaut de Spring Security.
                         //.loginPage("/login")
-                        /*
-                        redirection après login réussi => false veut dire "retourne à la page initialement demandée si
-                        il y en avait une : cas non ergonomique du create one dans home.html...
-                        */
-                        .defaultSuccessUrl("/bidList/list", false)
+                        .defaultSuccessUrl("/bidList/list", true)
                         .failureUrl("/login?error=true")
                         // permet de définir un gestionnaire personnalisé qui sera exécuté après une connexion réussie afin de rediriger dynamiquement l'utilisateur selon son rôle.
-                        .successHandler(authenticationSuccessHandler())
+                        // n'est plus utilisée pour le moment ==> voir remarque sur la méthode authenticationSuccessHandler.
+                        //.successHandler(authenticationSuccessHandler())
                         // Tout le monde peut y accéder
                         .permitAll()
                 )       
@@ -143,9 +139,12 @@ public class SpringSecurityConfiguration {
     }
 
     // permet de personnaliser ce qui se passe après une connexion réussie.
+    // n'est plus utile pour le moment (classe AuthentificationHandler supprimée).
+    /*
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return new AuthenticationHandler();
     }
+    */
 
 }

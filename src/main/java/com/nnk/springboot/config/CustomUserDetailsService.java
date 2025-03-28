@@ -33,6 +33,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private List<SimpleGrantedAuthority> getGrantedAuthorities(String role) {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+        log.debug("Authorities: " + authorities);
         return authorities;
     }
 
