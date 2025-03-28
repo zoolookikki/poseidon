@@ -74,8 +74,8 @@ public class SpringSecurityConfiguration {
                 })
                 // Pages de connexion/déconnexion personnalisées.
                 .formLogin(form -> form
-                        // pour plus tard, pour le moment utilisation de la page par défaut de Spring Security.
-                        //.loginPage("/login")
+                        // la page personnalisée.
+                        .loginPage("/login")
                         .defaultSuccessUrl("/bidList/list", true)
                         .failureUrl("/login?error=true")
                         // permet de définir un gestionnaire personnalisé qui sera exécuté après une connexion réussie afin de rediriger dynamiquement l'utilisateur selon son rôle.
