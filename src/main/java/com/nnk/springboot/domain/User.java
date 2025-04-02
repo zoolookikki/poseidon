@@ -1,7 +1,6 @@
 package com.nnk.springboot.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Entity
@@ -17,19 +16,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(length = 125)
-    @NotBlank(message = "Username is mandatory")
+    // unique = true garanti qu’aucun utilisateur ne peut avoir le même nom.
+    @Column(nullable = false, unique = true, length = 125)
     private String username;
 
-    @Column(length = 125)
-    @NotBlank(message = "Password is mandatory")
+    @Column(nullable = false, length = 125)
     private String password;
 
-    @Column(length = 125)
-    @NotBlank(message = "FullName is mandatory")
+    @Column(nullable = false, length = 125)
     private String fullname;
 
-    @Column(length = 125)
-    @NotBlank(message = "Role is mandatory")
+    @Column(nullable = false, length = 125)
     private String role;
 }
