@@ -55,7 +55,7 @@ public class UserController {
         }
 
         try {
-            userService.save(userCreateRequestDto);
+            userService.addUser(userCreateRequestDto);
         } catch (UsernameAlreadyExistsException ex) {
             // erreur affichée sur ce champ idem erreurs de saisie contrôlées dans les Dtos.
             result.rejectValue("username", "error.user", ex.getMessage());
@@ -70,7 +70,7 @@ public class UserController {
                                  Model model) {
         log.debug("GetMapping/showUpdateForm,id="+id);
 
-        User user = userService.findById(id);
+        User user = userService.getById(id);
 
         // transformation en UserUpdateRequestDto pour laisser la saisie du mot de passe libre.
         UserUpdateRequestDto userUpdateRequestDto = userMapper.toUpdateRequestDto(user);
@@ -90,7 +90,7 @@ public class UserController {
         }
 
         try {
-            userService.update(id, userUpdateRequestDto);
+            userService.updateUser(id, userUpdateRequestDto);
         } catch (UsernameAlreadyExistsException ex) {
             result.rejectValue("username", "error.user", ex.getMessage());
             return "user/update";

@@ -45,14 +45,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(Integer id) {
+    public User getById(Integer id) {
         // exception car si l'id n'est pas trouvé, c'est une erreur grave.
         return userRepository.findById(id)
                    .orElseThrow(() -> new UserNotFoundException("findById error : id " + id + " not found"));
     }
 
     @Override
-    public UserDto save(UserCreateRequestDto userCreateRequestDto) {
+    public UserDto addUser(UserCreateRequestDto userCreateRequestDto) {
         // vérification que le username est unique.
         if (userRepository.findByUsername(userCreateRequestDto.getUsername()).isPresent()) {
             throw new UsernameAlreadyExistsException("The name "+userCreateRequestDto.getUsername()+" is already in use");
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto update(Integer id, UserUpdateRequestDto userUpdateRequestDto) {
+    public UserDto updateUser(Integer id, UserUpdateRequestDto userUpdateRequestDto) {
         log.debug("update,id="+id+",userUpdateRequestDto="+userUpdateRequestDto);
 
         User user = userRepository.findById(id)
