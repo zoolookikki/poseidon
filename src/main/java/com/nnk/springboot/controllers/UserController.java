@@ -27,6 +27,8 @@ public class UserController {
 
     @GetMapping("/list")
     public String list(Model model) {
+        log.debug("GetMapping/list");
+
         // ici users est lié à List<UserDto>.
         model.addAttribute("users", userService.findAll());
 
@@ -35,6 +37,8 @@ public class UserController {
 
     @GetMapping("/add")
     public String showAddForm(Model model) {
+        log.debug("GetMapping/showAddForm");
+
         model.addAttribute("user", new UserCreateRequestDto());
 
         return "user/add";
@@ -44,6 +48,8 @@ public class UserController {
     // @ModelAttribute permet de lier les champs d’un formulaire HTML à un objet Java.
     public String create(@Valid @ModelAttribute("user") UserCreateRequestDto userCreateRequestDto,
                          BindingResult result) {
+        log.debug("PostMapping/create,userCreateRequestDto="+userCreateRequestDto);
+
         if (result.hasErrors()) {
             return "user/add";
         }
@@ -62,6 +68,8 @@ public class UserController {
     @GetMapping("/update/{id}")
     public String showUpdateForm(@PathVariable Integer id,
                                  Model model) {
+        log.debug("GetMapping/showUpdateForm,id="+id);
+
         User user = userService.findById(id);
 
         // transformation en UserUpdateRequestDto pour laisser la saisie du mot de passe libre.
@@ -93,6 +101,8 @@ public class UserController {
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
+        log.debug("GetMapping/delete,id="+id);
+
         userService.deleteById(id);
 
         return "redirect:/user/list";
