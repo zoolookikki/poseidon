@@ -4,21 +4,25 @@ package com.nnk.springboot.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 
 /**
  * For entering the user creation form.
  */
+/*
+@Data génère automatiquement des getters, setters, `toString`, equals, hashCode, et un constructeur par défaut => warning.
+Par défaut, Lombok génère equals() et hashCode() uniquement pour les champs de UserCreateRequestDto, et il ignore CommonRequestUserDto.
+En ajoutant @EqualsAndHashCode(callSuper = true), il inclut les champs hérités de CommonUserDTO dans equals() et hashCode(), évitant ainsi des comparaisons incorrectes.
+Idem pour toString().
+*/
 @Data
-public class UserCreateRequestDto {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class UserCreateRequestDto extends CommonRequestUserDto{
 
-    @NotBlank(message = "Username is mandatory")
-    @Pattern(
-            regexp = "^[A-Za-zÀ-ÖØ-öø-ÿ0-9 -]+$",
-            message = "The username must only contain letters, numbers, spaces or hyphens."
-    )
-    private String username;
-
-    @NotBlank(message = "Password is mandatory")
+     @NotBlank(message = "Password is mandatory")
     /*
     (?=.*[A-Z]) : au moins une majuscule.
     (?=.*\\d) : au moins un chiffre.
@@ -31,17 +35,4 @@ public class UserCreateRequestDto {
     )
     private String password;
 
-    @NotBlank(message = "FullName is mandatory")
-    @Pattern(
-            regexp = "^[A-Za-zÀ-ÖØ-öø-ÿ0-9 -]+$",
-            message = "The fullname must only contain letters, numbers, spaces or hyphens."
-    )
-    private String fullname;
-
-    @NotBlank(message = "Role is mandatory")
-    @Pattern(
-            regexp = "^(USER|ADMIN)$",
-            message = "Role must be either 'USER' or 'ADMIN'"
-    )
-    private String role;
-}
+ }
