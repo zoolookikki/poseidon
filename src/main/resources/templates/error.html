@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error - Poseidon</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+</head>
+<body>
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="p-4 border rounded shadow-sm" style="min-width: 350px;">
+        <div class="mb-3">
+            <p class="text-center fw-bold" th:text="${errorMessage}"></p>
+        </div>
+
+        <div class="mb-3 text-center">
+            Logged in user: <b class="user" th:text="${username}"></b>
+        </div>
+
+        <div class="text-center">
+            <form th:action="@{/}" method="GET">
+                <button type="submit" class="btn btn-primary btn-sm">Back to Home</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
