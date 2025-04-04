@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
-public abstract class AbstractCrudService<ENTITY, ENTITYDTO> {
+public abstract class AbstractCrudService<ENTITY, DTO> {
 
     protected final JpaRepository<ENTITY, Integer> repository;
 
@@ -16,17 +16,17 @@ public abstract class AbstractCrudService<ENTITY, ENTITYDTO> {
     }
 
     // fonction à implémenter dans la classe fille.
-    protected abstract ENTITYDTO toDto(ENTITY entity);
+    protected abstract DTO toDto(ENTITY entity);
     
-    public List<ENTITYDTO> findAll() {
+    public List<DTO> findAll() {
         List<ENTITY> entitys = repository.findAll();
-        List<ENTITYDTO> entityDtos = new ArrayList<>();
+        List<DTO> dtos = new ArrayList<>();
 
         for (ENTITY entity : entitys) {
-            entityDtos.add(toDto(entity));
+            dtos.add(toDto(entity));
         }
 
-        return entityDtos;
+        return dtos;
     }
 
     public ENTITY getById(Integer id) {

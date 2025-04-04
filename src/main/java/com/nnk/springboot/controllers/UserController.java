@@ -1,111 +1,112 @@
 package com.nnk.springboot.controllers;
 
-import com.nnk.springboot.domain.User;
-import com.nnk.springboot.dto.UserCreateRequestDto;
-import com.nnk.springboot.dto.UserUpdateRequestDto;
-import com.nnk.springboot.exception.UsernameAlreadyExistsException;
-import com.nnk.springboot.mapper.UserMapper;
-import com.nnk.springboot.service.IUserService;
-import jakarta.validation.Valid;
-import lombok.extern.log4j.Log4j2;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.nnk.springboot.domain.User;
+import com.nnk.springboot.dto.UserCreateRequestDto;
+import com.nnk.springboot.dto.UserDto;
+import com.nnk.springboot.dto.UserUpdateRequestDto;
+import com.nnk.springboot.exception.UsernameAlreadyExistsException;
+import com.nnk.springboot.mapper.UserMapper;
+import com.nnk.springboot.service.IUserService;
+
+import jakarta.validation.Valid;
+import lombok.extern.log4j.Log4j2;
 
 @Controller
 @RequestMapping("/user")
 @Log4j2
-public class UserController {
+public class UserController extends AbstractCrudController<User, UserDto, UserCreateRequestDto, UserUpdateRequestDto> {
+
+    private final IUserService userService;
+    private final UserMapper userMapper;
 
     @Autowired
-    private IUserService userService;
-
-    @Autowired
-    private UserMapper userMapper;
-
-    @GetMapping("/list")
-    public String list(Model model) {
-        log.debug("GetMapping/list");
-
-        // ici users est lié à List<UserDto>.
-        model.addAttribute("users", userService.findAll());
-
-        return "user/list";
+    public UserController(IUserService userService, UserMapper userMapper) {
+        this.userService = userService;
+        this.userMapper = userMapper;
     }
 
-    @GetMapping("/add")
-    public String showAddForm(Model model) {
-        log.debug("GetMapping/showAddForm");
-
-        model.addAttribute("user", new UserCreateRequestDto());
-
-        return "user/add";
+    // méthodes à implémenter pour la classe abtract.
+    
+    @Override
+    protected String getEntityName() {
+        return "user";
     }
 
+    @Override
+    protected List<UserDto> findAll() {
+        return userService.findAll();
+    }
+
+    @Override
+    protected UserCreateRequestDto emptyCreateDto() {
+        return new UserCreateRequestDto();
+    }
+
+    @Override
+    protected User getById(Integer id) {
+        return userService.getById(id);
+    }
+
+    @Override
+    protected UserUpdateRequestDto getUpdateDto(User user) {
+        return userMapper.toUpdateRequestDto(user);
+    }
+
+    @Override
+    protected void deleteById(Integer id) {
+        userService.deleteById(id);
+    }
+
+    @Override
+    protected UserDto add(UserCreateRequestDto dto) {
+        return userService.addUser(dto);
+    }
+
+    @Override
+    protected UserDto update(Integer id, UserUpdateRequestDto dto) {
+        return userService.updateUser(id, dto);
+    }
+
+    // méthodes spécifiques à l'entité User => non généralistes : username unique.
+    
     @PostMapping("/validate")
-    // @ModelAttribute permet de lier les champs d’un formulaire HTML à un objet Java.
-    public String create(@Valid @ModelAttribute("user") UserCreateRequestDto userCreateRequestDto,
-                         BindingResult result) {
-        log.debug("PostMapping/create,userCreateRequestDto="+userCreateRequestDto);
-
-        if (result.hasErrors()) {
-            return "user/add";
-        }
+    public String submitCreateForm(@Valid @ModelAttribute("user") UserCreateRequestDto dto,
+                                   BindingResult result, 
+                                   Model model) {
+        log.debug("PostMapping/submitCreateForm,userCreateRequestDto="+dto);
 
         try {
-            userService.addUser(userCreateRequestDto);
+            return create(dto, result, model);
         } catch (UsernameAlreadyExistsException ex) {
-            // erreur affichée sur ce champ idem erreurs de saisie contrôlées dans les Dtos.
             result.rejectValue("username", "error.user", ex.getMessage());
             return "user/add";
         }
-
-        return "redirect:/user/list";
-    }
-
-    @GetMapping("/update/{id}")
-    public String showUpdateForm(@PathVariable Integer id,
-                                 Model model) {
-        log.debug("GetMapping/showUpdateForm,id="+id);
-
-        User user = userService.getById(id);
-
-        // transformation en UserUpdateRequestDto pour laisser la saisie du mot de passe libre.
-        UserUpdateRequestDto userUpdateRequestDto = userMapper.toUpdateRequestDto(user);
-        model.addAttribute("user", userUpdateRequestDto);
-
-        return "user/update";
     }
 
     @PostMapping("/update/{id}")
-    public String update(@PathVariable Integer id,
-                         @Valid @ModelAttribute("user") UserUpdateRequestDto userUpdateRequestDto,
-                         BindingResult result) {
-        log.debug("PostMapping/update,id="+id+",userUpdateRequestDto="+userUpdateRequestDto);
-
-        if (result.hasErrors()) {
-            return "user/update";
-        }
-
+    public String submitUpdateForm(@PathVariable Integer id,
+                                   @Valid @ModelAttribute("user") UserUpdateRequestDto dto,
+                                   BindingResult result, 
+                                   Model model) {
+        log.debug("PostMapping/submitUpdateForm,id="+id+",userUpdateRequestDto="+dto);
+        
         try {
-            userService.updateUser(id, userUpdateRequestDto);
+            return update(id, dto, result, model);
         } catch (UsernameAlreadyExistsException ex) {
             result.rejectValue("username", "error.user", ex.getMessage());
             return "user/update";
         }
-
-        return "redirect:/user/list";
     }
-
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Integer id) {
-        log.debug("GetMapping/delete,id="+id);
-
-        userService.deleteById(id);
-
-        return "redirect:/user/list";
-    }
-
+    
 }
