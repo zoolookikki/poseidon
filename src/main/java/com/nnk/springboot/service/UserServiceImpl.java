@@ -1,54 +1,41 @@
 package com.nnk.springboot.service;
 
+import java.util.Optional;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.nnk.springboot.domain.User;
 import com.nnk.springboot.dto.UserCreateRequestDto;
 import com.nnk.springboot.dto.UserDto;
 import com.nnk.springboot.dto.UserUpdateRequestDto;
+import com.nnk.springboot.exception.EntityNotFoundException;
 import com.nnk.springboot.exception.UsernameAlreadyExistsException;
 import com.nnk.springboot.mapper.UserMapper;
 import com.nnk.springboot.repositories.UserRepository;
 
-import com.nnk.springboot.exception.UserNotFoundException;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @Log4j2
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends AbstractCrudService<User, UserDto> implements IUserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-
-    @Autowired
-    private UserMapper userMapper;
-
-    @Override
-    public List<UserDto> findAll() {
-        List<User> users = userRepository.findAll();
-        List<UserDto> userDtos = new ArrayList<>();
-
-        for (User user : users) {
-            userDtos.add(userMapper.toDto(user));
-        }
-
-        return userDtos;
+    public UserServiceImpl(UserRepository userRepository,
+                           UserMapper userMapper,
+                           BCryptPasswordEncoder passwordEncoder) {
+        super(userRepository);
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public User getById(Integer id) {
-        // exception car si l'id n'est pas trouvé, c'est une erreur grave.
-        return userRepository.findById(id)
-                   .orElseThrow(() -> new UserNotFoundException("findById error : id " + id + " not found"));
+    protected UserDto toDto(User user) {
+        return userMapper.toDto(user);
     }
 
     @Override
@@ -64,13 +51,13 @@ public class UserServiceImpl implements UserService {
 
         return userMapper.toDto(userRepository.save(user));
     }
-
+  
     @Override
     public UserDto updateUser(Integer id, UserUpdateRequestDto userUpdateRequestDto) {
         log.debug("update,id="+id+",userUpdateRequestDto="+userUpdateRequestDto);
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("update error : id " + id + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException("update error : id " + id + " not found"));
 
         // vérification que le username est unique.
         Optional<User> sameUsername = userRepository.findByUsername(userUpdateRequestDto.getUsername());
@@ -89,14 +76,5 @@ public class UserServiceImpl implements UserService {
 
         return userMapper.toDto(userRepository.save(user));
     }
-
-    @Override
-    public void deleteById(Integer id) {
-        if (!userRepository.existsById(id)) {
-            // exception car si l'id n'existe pas, c'est une erreur grave.
-            throw new UserNotFoundException("deleteById error : id " + id + " not found");
-        }
-        userRepository.deleteById(id);
-    }
-
+    
 }

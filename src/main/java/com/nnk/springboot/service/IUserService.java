@@ -1,13 +1,13 @@
 package com.nnk.springboot.service;
 
+import java.util.List;
+
 import com.nnk.springboot.domain.User;
 import com.nnk.springboot.dto.UserCreateRequestDto;
 import com.nnk.springboot.dto.UserDto;
 import com.nnk.springboot.dto.UserUpdateRequestDto;
 
-import java.util.List;
-
-public interface UserService {
+public interface IUserService {
     List<UserDto> findAll();
     // getById plus clair que FindById car cette méthode renvoit toujours un id sinon il y a exception.
     User getById(Integer id);
@@ -16,4 +16,3 @@ public interface UserService {
     UserDto updateUser(Integer id, UserUpdateRequestDto userUpdateRequestDto);
     void deleteById(Integer id);
 }
-
