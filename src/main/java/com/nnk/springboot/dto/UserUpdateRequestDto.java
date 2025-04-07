@@ -1,6 +1,7 @@
 package com.nnk.springboot.dto;
 
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -15,6 +16,7 @@ public class UserUpdateRequestDto extends CommonRequestUserDto{
 
     private Integer id;
 
+    @Size(max = 125, message = "Password must not exceed 125 characters")
     /*
     Attention, ici, le mot de passe n'est pas obligatoire car on le modifie que si il est saisi => ^$| (vide ou ...)
     voir UserCreateRequestDto pour commentaires sur le reste.

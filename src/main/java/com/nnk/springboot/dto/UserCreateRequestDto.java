@@ -3,6 +3,7 @@ package com.nnk.springboot.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -22,7 +23,8 @@ Idem pour toString().
 @ToString(callSuper = true)
 public class UserCreateRequestDto extends CommonRequestUserDto{
 
-     @NotBlank(message = "Password is mandatory")
+    @NotBlank(message = "Password is mandatory")
+    @Size(max = 125, message = "Password must not exceed 125 characters")
     /*
     (?=.*[A-Z]) : au moins une majuscule.
     (?=.*\\d) : au moins un chiffre.

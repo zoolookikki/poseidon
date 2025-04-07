@@ -3,7 +3,7 @@ CREATE TABLE bid_lists (
   id INT NOT NULL AUTO_INCREMENT,
   account VARCHAR(30) NOT NULL,
   type VARCHAR(30) NOT NULL,
-  bid_quantity DOUBLE,
+  bid_quantity DOUBLE NOT NULL,
   ask_quantity DOUBLE,
   bid DOUBLE ,
   ask DOUBLE,
