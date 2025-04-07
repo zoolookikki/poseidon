@@ -1,0 +1,46 @@
+<div th:fragment="form(update)">
+    
+    <!-- Account -->
+    <div class="form-group">
+        <label for="account" class="col-sm-2 control-label">Account</label>
+        <div class="col-sm-10">
+            <input type="text" th:field="*{account}" id="account" placeholder="Account" class="col-4" maxlength="30" required>
+            <small class="form-text text-muted">30 characters maximum</small>
+            <p class="text-danger" th:if="${#fields.hasErrors('account')}" th:errors="*{account}"></p>
+        </div>
+    </div>
+
+     <!-- Type -->
+    <div class="form-group">
+        <label for="type" class="col-sm-2 control-label">Type</label>
+        <div class="col-sm-10">
+            <input type="text" th:field="*{type}" id="type" placeholder="Type" class="col-4" maxlength="30" required>
+            <small class="form-text text-muted">30 characters maximum</small>
+            <p class="text-danger" th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></p>
+        </div>
+    </div>
+
+    <!-- Bid quantity -->
+    <div class="form-group">
+        <label for="bidQuantity" class="col-sm-2 control-label">Bid Quantity</label>
+        <div class="col-sm-10">
+            <input type="number" th:field="*{bidQuantity}" id="bidQuantity" placeholder="Bid Quantity" class="col-4" min="0.01" step="0.01" required>
+            <small class="form-text text-muted">Enter a number greater than 0.01</small>
+            <p class="text-danger" th:if="${#fields.hasErrors('bidQuantity')}" th:errors="*{bidQuantity}"></p>
+        </div>
+    </div>
+
+    <!-- Id (hidden if update) -->
+    <div th:if="${update}">
+        <input type="hidden" th:field="*{id}">
+    </div>
+
+    <!-- Submit -->
+    <div class="form-group">
+        <div class="col-sm-12">
+            <a class="btn btn-danger btn-sm" th:href="@{/bidList/list}">Cancel</a>
+            <input class="btn btn-primary btn-sm" type="submit" th:value="${update} ? 'Update Bid List' : 'Add Bid List'">
+        </div>
+    </div>
+
+</div>

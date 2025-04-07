@@ -73,7 +73,7 @@ public abstract class AbstractCrudController<ENTITY, DTO, CREATE_DTO, UPDATE_DTO
     // méthodes de base appelées par toutes les classes filles.
     
     protected String create(CREATE_DTO dto, BindingResult result, Model model) {
-        log.debug("create");
+        log.debug("create,result="+result);
         
         if (result.hasErrors()) {
             model.addAttribute(getEntityName(), dto);
@@ -86,7 +86,7 @@ public abstract class AbstractCrudController<ENTITY, DTO, CREATE_DTO, UPDATE_DTO
     }
     
     protected String update(Integer id, UPDATE_DTO dto, BindingResult result, Model model) {
-        log.debug("update");
+        log.debug("update,result="+result);
         
         if (result.hasErrors()) {
             model.addAttribute(getEntityName(), dto);
