@@ -1,53 +1,93 @@
 package com.nnk.springboot.controllers;
 
-import com.nnk.springboot.domain.BidList;
-import jakarta.validation.Valid;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.nnk.springboot.domain.BidList;
+import com.nnk.springboot.dto.BidListDto;
+import com.nnk.springboot.dto.BidListCreateRequestDto;
+import com.nnk.springboot.dto.BidListUpdateRequestDto;
+import com.nnk.springboot.mapper.BidListMapper;
+import com.nnk.springboot.service.IBidListService;
+
+import jakarta.validation.Valid;
+import lombok.extern.log4j.Log4j2;
+
 @Controller
-public class BidListController {
-    // TODO: Inject Bid service
+@RequestMapping("/bidList")
+@Log4j2
+public class BidListController extends AbstractCrudController<BidList, BidListDto, BidListCreateRequestDto, BidListUpdateRequestDto> {
 
-    @RequestMapping("/bidList/list")
-    public String home(Model model)
-    {
-        // TODO: call service find all bids to show to the view
-        return "bidList/list";
+    private final IBidListService bidListService;
+    private final BidListMapper bidListMapper;
+
+    @Autowired
+    public BidListController(IBidListService bidListService, BidListMapper bidListMapper) {
+        this.bidListService = bidListService;
+        this.bidListMapper = bidListMapper;
     }
 
-    @GetMapping("/bidList/add")
-    public String addBidForm(BidList bid) {
-        return "bidList/add";
+    @Override
+    protected String getEntityName() {
+        return "bidList";
     }
 
-    @PostMapping("/bidList/validate")
-    public String validate(@Valid BidList bid, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return bid list
-        return "bidList/add";
+    @Override
+    protected BidListCreateRequestDto emptyCreateDto() {
+        return new BidListCreateRequestDto();
     }
 
-    @GetMapping("/bidList/update/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get Bid by Id and to model then show to the form
-        return "bidList/update";
+    @Override
+    protected BidListUpdateRequestDto getUpdateDto(BidList entity) {
+        return bidListMapper.toUpdateRequestDto(entity);
     }
 
-    @PostMapping("/bidList/update/{id}")
-    public String updateBid(@PathVariable("id") Integer id, @Valid BidList bidList,
-                             BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Bid and return list Bid
-        return "redirect:/bidList/list";
+    @Override
+    protected List<BidListDto> findAll() {
+        return bidListService.findAll();
     }
 
-    @GetMapping("/bidList/delete/{id}")
-    public String deleteBid(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find Bid by Id and delete the bid, return to Bid list
-        return "redirect:/bidList/list";
+    @Override
+    protected BidList getById(Integer id) {
+        return bidListService.getById(id);
+    }
+
+    @Override
+    protected BidListDto add(BidListCreateRequestDto dto) {
+        return bidListService.addBidList(dto);
+    }
+
+    @Override
+    protected BidListDto update(Integer id, BidListUpdateRequestDto dto) {
+        return bidListService.updateBidList(id, dto);
+    }
+
+    @Override
+    protected void deleteById(Integer id) {
+        bidListService.deleteById(id);
+    }
+
+    @PostMapping("/validate")
+    public String submitCreateForm(@Valid @ModelAttribute("bidList") BidListCreateRequestDto dto,
+                                   BindingResult result, 
+                                   Model model) {
+        return create(dto, result, model);
+    }
+
+    @PostMapping("/update/{id}")
+    public String submitUpdateForm(@PathVariable Integer id,
+                                   @Valid @ModelAttribute("bidList") BidListUpdateRequestDto dto,
+                                   BindingResult result,
+                                   Model model) {
+        return update(id, dto, result, model);
     }
 }
+

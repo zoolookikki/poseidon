@@ -38,14 +38,15 @@ public class UserServiceImpl extends AbstractCrudService<User, UserDto> implemen
         return userMapper.toDto(user);
     }
 
+    
     @Override
-    public UserDto addUser(UserCreateRequestDto userCreateRequestDto) {
+    public UserDto addUser(UserCreateRequestDto dto) {
         // vérification que le username est unique.
-        if (userRepository.findByUsername(userCreateRequestDto.getUsername()).isPresent()) {
-            throw new UsernameAlreadyExistsException("The name "+userCreateRequestDto.getUsername()+" is already in use");
+        if (userRepository.findByUsername(dto.getUsername()).isPresent()) {
+            throw new UsernameAlreadyExistsException("The name "+dto.getUsername()+" is already in use");
         }
 
-        User user = userMapper.fromCreateRequestDto(userCreateRequestDto);
+        User user = userMapper.fromCreateRequestDto(dto);
         // encodage du mot de passe.
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
@@ -53,26 +54,26 @@ public class UserServiceImpl extends AbstractCrudService<User, UserDto> implemen
     }
   
     @Override
-    public UserDto updateUser(Integer id, UserUpdateRequestDto userUpdateRequestDto) {
-        log.debug("update,id="+id+",userUpdateRequestDto="+userUpdateRequestDto);
+    public UserDto updateUser(Integer id, UserUpdateRequestDto dto) {
+        log.debug("update,id="+id+",userUpdateRequestDto="+dto);
 
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("update error : id " + id + " not found"));
 
         // vérification que le username est unique.
-        Optional<User> sameUsername = userRepository.findByUsername(userUpdateRequestDto.getUsername());
+        Optional<User> sameUsername = userRepository.findByUsername(dto.getUsername());
         if (sameUsername.isPresent() && !sameUsername.get().getId().equals(id)) {
-            throw new UsernameAlreadyExistsException("The name "+userUpdateRequestDto.getUsername()+" is already in use");
+            throw new UsernameAlreadyExistsException("The name "+dto.getUsername()+" is already in use");
         }
 
         // pour être sûr de ce que l'on modifie.
-        user.setUsername(userUpdateRequestDto.getUsername());
+        user.setUsername(dto.getUsername());
         // ne modifier et encryter le mot de passe que si il a été saisit.
-        if (userUpdateRequestDto.getPassword() != null && !userUpdateRequestDto.getPassword().isEmpty()) {
-            user.setPassword(passwordEncoder.encode(userUpdateRequestDto.getPassword()));
+        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
         }
-        user.setFullname(userUpdateRequestDto.getFullname());
-        user.setRole(userUpdateRequestDto.getRole());
+        user.setFullname(dto.getFullname());
+        user.setRole(dto.getRole());
 
         return userMapper.toDto(userRepository.save(user));
     }
