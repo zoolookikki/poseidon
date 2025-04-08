@@ -5,7 +5,10 @@ import lombok.*;
 
 import java.time.Instant;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 @Entity
+// Point sur une courbe de taux d’intérêt.
 @Table(name = "curve_points")
 @Getter
 @Setter
@@ -18,13 +21,19 @@ public class CurvePoint {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    // Référence de la courbe à laquelle appartient ce point (1, 2, 3, etc...)
     private Integer curveId;
 
+    // Date de validité du point.
     private Instant asOfDate;
 
+    // Durée en année (1.00 = 1 an, 0.50 = 6 mois)
     private Double term;
 
+    // La valeur au terme en % ou en valeur.
     private Double value;
 
+    // Spécificité Hibernate : remplis automatiquement le champ avec la date/heure au moment de l’insertion uniquement.
+    @CreationTimestamp
     private Instant creationDate;
 }

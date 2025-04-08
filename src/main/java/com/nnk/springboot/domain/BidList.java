@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.Instant;
 
 @Entity
+// OFFRE D'ACHAT
 @Table(name = "bid_lists")
 /*
 Non utilisation de @Data car génère equals() et hashCode(), ce qui peut être problématique pour les entités JPA (vu sur plusieurs sites) => à la place :
@@ -26,11 +27,14 @@ public class BidList {
     private Integer id;
 
     @Column(nullable = false, length = 30)
+    // nom du compte (ou identifiant) à l’origine de l’offre.
     private String account;
 
     @Column(nullable = false, length = 30)
+    // le type d'opération : obligations
     private String type;
 
+    // quantité d'achat.
     private Double bidQuantity;
 
     private Double askQuantity;

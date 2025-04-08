@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" 
       xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8"/>
-<title>Home</title>
-<link rel="stylesheet" href="../../css/bootstrap.min.css" >
+    <meta charset="utf-8"/>
+    <title>Home</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css" >
 </head>
 <body>
 <div class="container">
@@ -26,9 +26,10 @@
             <tbody>
                 <tr th:each="curvePoint : ${curvePoints}">
                     <td style="width: 10%" th:text="${curvePoint.id}"></td>
-                    <td th:text="${curvePoint.id}"></td>
-                    <td th:text="${curvePoint.term}"></td>
-                    <td th:text="${curvePoint.value}"></td>
+                    <td th:text="${curvePoint.curveId}"></td>
+                    <!-- #numbers.formatDecimal(number, minIntegerDigits, minFractionDigits) -->
+                    <td th:text="${#numbers.formatDecimal(curvePoint.term, 1, 2)}"></td>
+                    <td th:text="${#numbers.formatDecimal(curvePoint.value, 1, 2)}"></td>
                     <td style="width: 15%" class="text-center">
                         <a th:href="@{/curvePoint/update/{id}(id=${curvePoint.id})}">Edit</a>&nbsp;|&nbsp;
                         <a th:href="@{/curvePoint/delete/{id}(id=${curvePoint.id})}">Delete</a>
