@@ -1,26 +1,35 @@
 package com.nnk.springboot.mapper;
 
 import com.nnk.springboot.domain.BidList;
-import com.nnk.springboot.dto.BidListCreateRequestDto;
-import com.nnk.springboot.dto.BidListDto;
-import com.nnk.springboot.dto.BidListUpdateRequestDto;
+import com.nnk.springboot.dto.bidList.BidListCreateRequestDto;
+import com.nnk.springboot.dto.bidList.BidListDto;
+import com.nnk.springboot.dto.bidList.BidListUpdateRequestDto;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
-// gràce à cette annotation, mapstruct va générer une implémentation de cette interface automatique lors de la compilation.
+//gràce à cette annotation, mapstruct va générer une implémentation de cette interface automatique lors de la compilation.
 @Mapper(componentModel = "spring")
-public interface BidListMapper {
+public interface BidListMapper extends IMapper<
+        BidList,
+        BidListDto,
+        BidListCreateRequestDto,
+        BidListUpdateRequestDto> {
 
-    // Création d'une nouvelle entité depuis un formulaire de création.
     // Pour supprimer le warning à la compilation car c'est volontaire (l'id sera généré lors de l'insertion dans la base).
     @Mapping(target = "id", ignore = true)
-    BidList fromCreateRequestDto(BidListCreateRequestDto bidListCreateRequestDto);
+    @Override
+    BidList fromCreateRequestDto(BidListCreateRequestDto dto);
 
-    // Conversion de l'entité BidList vers BidListDto pour l'affichage.
+    @Override
     BidListDto toDto(BidList bidList);
 
-    // Pour le formulaire lors de la modification.
-    BidListUpdateRequestDto toUpdateRequestDto(BidList bidlist);
+    @Override
+    BidListUpdateRequestDto toUpdateRequestDto(BidList bidList);
 
+    @Override
+    // @MappingTarget permet de mettre à jour l'entité à partir de tous les champs de la dto sans perdre le contenu des autres champs.
+    void updateEntityFromDto(@MappingTarget BidList bidList, BidListUpdateRequestDto dto);
+    
 }

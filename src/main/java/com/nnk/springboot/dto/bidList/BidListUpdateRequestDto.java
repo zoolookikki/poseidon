@@ -1,16 +1,16 @@
-package com.nnk.springboot.dto;
+package com.nnk.springboot.dto.bidList;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * For entering a curvpoint modification form
+ * For entering a bidlist modification form
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class CurvePointUpdateRequestDto extends CommonRequestCurvePointDto{
+public class BidListUpdateRequestDto extends CommonRequestBidListDto{
 
     private Integer id;
     

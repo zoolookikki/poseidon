@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.nnk.springboot.domain.CurvePoint;
-import com.nnk.springboot.dto.CurvePointCreateRequestDto;
-import com.nnk.springboot.dto.CurvePointDto;
-import com.nnk.springboot.dto.CurvePointUpdateRequestDto;
+import com.nnk.springboot.dto.curvePoint.CurvePointCreateRequestDto;
+import com.nnk.springboot.dto.curvePoint.CurvePointDto;
+import com.nnk.springboot.dto.curvePoint.CurvePointUpdateRequestDto;
 import com.nnk.springboot.mapper.CurvePointMapper;
-import com.nnk.springboot.service.ICurvePointService;
+import com.nnk.springboot.service.curvePoint.ICurvePointService;
 
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
@@ -62,12 +62,12 @@ public class CurvePointController extends AbstractCrudController<CurvePoint, Cur
 
     @Override
     protected CurvePointDto add(CurvePointCreateRequestDto dto) {
-        return curvePointService.addCurvePoint(dto);
+        return curvePointService.add(dto);
     }
 
     @Override
     protected CurvePointDto update(Integer id, CurvePointUpdateRequestDto dto) {
-        return curvePointService.updateCurvePoint(id, dto);
+        return curvePointService.update(id, dto);
     }
 
     @Override

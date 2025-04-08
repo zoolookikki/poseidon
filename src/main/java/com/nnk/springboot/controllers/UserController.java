@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.nnk.springboot.domain.User;
-import com.nnk.springboot.dto.UserCreateRequestDto;
-import com.nnk.springboot.dto.UserDto;
-import com.nnk.springboot.dto.UserUpdateRequestDto;
+import com.nnk.springboot.dto.user.UserCreateRequestDto;
+import com.nnk.springboot.dto.user.UserDto;
+import com.nnk.springboot.dto.user.UserUpdateRequestDto;
 import com.nnk.springboot.exception.UsernameAlreadyExistsException;
 import com.nnk.springboot.mapper.UserMapper;
-import com.nnk.springboot.service.IUserService;
+import com.nnk.springboot.service.user.IUserService;
 
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
@@ -70,12 +70,12 @@ public class UserController extends AbstractCrudController<User, UserDto, UserCr
 
     @Override
     protected UserDto add(UserCreateRequestDto dto) {
-        return userService.addUser(dto);
+        return userService.add(dto);
     }
 
     @Override
     protected UserDto update(Integer id, UserUpdateRequestDto dto) {
-        return userService.updateUser(id, dto);
+        return userService.update(id, dto);
     }
 
     // méthodes spécifiques à l'entité User => non généralistes : username unique.

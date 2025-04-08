@@ -1,4 +1,4 @@
-package com.nnk.springboot.dto;
+package com.nnk.springboot.dto.curvePoint;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;

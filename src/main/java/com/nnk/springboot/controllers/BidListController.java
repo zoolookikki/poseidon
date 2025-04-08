@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.nnk.springboot.domain.BidList;
-import com.nnk.springboot.dto.BidListDto;
-import com.nnk.springboot.dto.BidListCreateRequestDto;
-import com.nnk.springboot.dto.BidListUpdateRequestDto;
+import com.nnk.springboot.dto.bidList.BidListCreateRequestDto;
+import com.nnk.springboot.dto.bidList.BidListDto;
+import com.nnk.springboot.dto.bidList.BidListUpdateRequestDto;
 import com.nnk.springboot.mapper.BidListMapper;
-import com.nnk.springboot.service.IBidListService;
+import com.nnk.springboot.service.bidList.IBidListService;
 
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
@@ -62,12 +62,12 @@ public class BidListController extends AbstractCrudController<BidList, BidListDt
 
     @Override
     protected BidListDto add(BidListCreateRequestDto dto) {
-        return bidListService.addBidList(dto);
+        return bidListService.add(dto);
     }
 
     @Override
     protected BidListDto update(Integer id, BidListUpdateRequestDto dto) {
-        return bidListService.updateBidList(id, dto);
+        return bidListService.update(id, dto);
     }
 
     @Override
