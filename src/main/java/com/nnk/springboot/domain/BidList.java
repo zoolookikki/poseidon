@@ -35,6 +35,7 @@ public class BidList {
     private String type;
 
     // quantité d'achat.
+    @Column(nullable = false)
     private Double bidQuantity;
 
     private Double askQuantity;

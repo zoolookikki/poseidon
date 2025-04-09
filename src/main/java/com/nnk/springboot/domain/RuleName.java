@@ -17,11 +17,11 @@ public class RuleName {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(length = 125)
+    @Column(nullable = false, length = 125)
     // nom de la règle.
     private String name;
 
-    @Column(length = 125)
+    @Column(nullable = false, length = 125)
     // description détaillée de la règle.
     private String description;
 

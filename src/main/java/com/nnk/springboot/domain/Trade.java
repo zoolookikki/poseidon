@@ -31,6 +31,7 @@ public class Trade {
     private String type;
 
     // Quantité achetée.
+    @Column(nullable = false)
     private Double buyQuantity;
 
     private Double sellQuantity;

@@ -22,15 +22,18 @@ public class CurvePoint {
     private Integer id;
 
     // Référence de la courbe à laquelle appartient ce point (1, 2, 3, etc...) => de 0 à 255 (1 à 255 réellement)
+    @Column(nullable = false)
     private Integer curveId;
 
     // Date de validité du point.
     private Instant asOfDate;
 
     // Durée en année (1.00 = 1 an, 0.50 = 6 mois)
+    @Column(nullable = false)
     private Double term;
 
     // La valeur au terme en % ou en valeur.
+    @Column(nullable = false)
     private Double value;
 
     // Spécificité Hibernate : remplis automatiquement le champ avec la date/heure au moment de l’insertion uniquement.
