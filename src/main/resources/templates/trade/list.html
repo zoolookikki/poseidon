@@ -28,7 +28,8 @@
                     <td style="width: 10%" th:text="${trade.id}"></td>
                     <td th:text="${trade.account}"></td>
                     <td th:text="${trade.type}"></td>
-                    <td th:text="${trade.buyQuantity}"></td>
+                    <!-- #numbers.formatDecimal(number, minIntegerDigits, minFractionDigits) -->
+                    <td th:text="${#numbers.formatDecimal(trade.buyQuantity, 1, 2)}"></td> 
                     <td style="width: 15%" class="text-center">
                         <a th:href="@{/trade/update/{id}(id=${trade.id})}">Edit</a>&nbsp;|&nbsp;
                         <a th:href="@{/trade/delete/{id}(id=${trade.id})}">Delete</a>

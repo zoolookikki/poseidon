@@ -1,4 +1,4 @@
-package com.nnk.springboot.dto.bidList;
+package com.nnk.springboot.dto.trade;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public abstract class CommonRequestBidListDto {
+public abstract class CommonRequestTradeDto {
 
     @NotBlank(message = "Account is mandatory")
     @Size(max = 30, message = "Maximum length: 30 characters")
@@ -17,8 +17,9 @@ public abstract class CommonRequestBidListDto {
     @Size(max = 30, message = "Maximum length: 30 characters")
     private String type;
 
-    @NotNull(message = "Bid Quantity is required")
-    @DecimalMin(value = "0.01", message = "Bid Quantity must be at least 0.01")
-    private Double bidQuantity;
+    @NotNull(message = "BuyQuantity is required")
+    @DecimalMin(value = "0.01", message = "BuyQuantity must be at least 0.01")
+    private Double buyQuantity;
+    
     
 }

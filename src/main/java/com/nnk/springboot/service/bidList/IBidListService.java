@@ -7,3 +7,4 @@ import com.nnk.springboot.dto.bidList.BidListUpdateRequestDto;
 import com.nnk.springboot.service.ICrudService;
 
 public interface IBidListService extends ICrudService<BidList, BidListDto, BidListCreateRequestDto, BidListUpdateRequestDto> {}
+ 

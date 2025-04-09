@@ -7,6 +7,7 @@ import lombok.*;
 import java.time.Instant;
 
 @Entity
+// TRANSACTION FINANCIERE
 @Table(name = "trades")
 @Getter
 @Setter
@@ -19,14 +20,17 @@ public class Trade {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    // Identifiant du compte concerné 
     @Column(nullable = false, length = 30)
     @NotBlank(message = "Account is mandatory")
     private String account;
 
+    // Type de transaction (achat, vente etc...)
     @Column(nullable = false, length = 30)
     @NotBlank(message = "Type is mandatory")
     private String type;
 
+    // Quantité achetée.
     private Double buyQuantity;
 
     private Double sellQuantity;

@@ -9,7 +9,7 @@ import lombok.Data;
 public abstract class CommonRequestUserDto {
 
     @NotBlank(message = "Username is mandatory")
-    @Size(max = 125, message = "Username must not exceed 125 characters")
+    @Size(max = 125, message = "Maximum length: 125 characters")
     @Pattern(
             regexp = "^[A-Za-zÀ-ÖØ-öø-ÿ0-9 -]+$",
             message = "The username must only contain letters, numbers, spaces or hyphens."
@@ -17,7 +17,7 @@ public abstract class CommonRequestUserDto {
     private String username;
 
     @NotBlank(message = "FullName is mandatory")
-    @Size(max = 125, message = "Fullname must not exceed 125 characters")
+    @Size(max = 125, message = "Maximum length: 125 characters")
     @Pattern(
             regexp = "^[A-Za-zÀ-ÖØ-öø-ÿ0-9 -]+$",
             message = "The fullname must only contain letters, numbers, spaces or hyphens."

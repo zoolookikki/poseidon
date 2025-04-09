@@ -30,7 +30,7 @@ CREATE TABLE trades (
   id INT NOT NULL AUTO_INCREMENT,
   account VARCHAR(30) NOT NULL,
   type VARCHAR(30) NOT NULL,
-  buy_quantity DOUBLE,
+  buy_quantity DOUBLE NOT NULL,
   sell_quantity DOUBLE,
   buy_price DOUBLE,
   sell_price DOUBLE,
@@ -65,18 +65,18 @@ CREATE TABLE curve_points (
 
 CREATE TABLE ratings (
   id INT NOT NULL AUTO_INCREMENT,
-  moodys_rating VARCHAR(125),
-  sandp_rating VARCHAR(125),
-  fitch_rating VARCHAR(125),
-  order_number TINYINT,
+  moodys_rating VARCHAR(125) NOT NULL,
+  sandp_rating VARCHAR(125) NOT NULL,
+  fitch_rating VARCHAR(125) NOT NULL,
+  order_number TINYINT NOT NULL,
 
   PRIMARY KEY (id)
 );
 
 CREATE TABLE rule_names (
   id INT NOT NULL AUTO_INCREMENT,
-  name VARCHAR(125),
-  description VARCHAR(125),
+  name VARCHAR(125) NOT NULL,
+  description VARCHAR(125) NOT NULL,
   json VARCHAR(125),
   template VARCHAR(512),
   sql_str VARCHAR(125),
