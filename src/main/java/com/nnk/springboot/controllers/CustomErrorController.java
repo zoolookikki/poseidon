@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * Custom controller to intercept standard Spring Boot error routes and provide user-friendly responses using Thymeleaf templates
@@ -32,7 +33,9 @@ public class CustomErrorController implements ErrorController {
      * @param model   the model used to pass the error message to the view
      * @return the name of the Thymeleaf error template
      */
-    @GetMapping("/error")
+    // @RequestMapping au lieu de @GetMapping car j'ai eu un cas (tiny) ou j'ai reçu l'erreur 405 en post.
+    // @GetMapping("/error")
+    @RequestMapping("/error")
     public String handleError(HttpServletRequest request, Model model) {
         Object errorStatusCode = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 
