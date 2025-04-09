@@ -15,6 +15,7 @@ import com.nnk.springboot.domain.RuleName;
 import com.nnk.springboot.dto.ruleName.RuleNameCreateRequestDto;
 import com.nnk.springboot.dto.ruleName.RuleNameDto;
 import com.nnk.springboot.dto.ruleName.RuleNameUpdateRequestDto;
+import com.nnk.springboot.exception.RuleNameAlreadyExistsException;
 import com.nnk.springboot.mapper.RuleNameMapper;
 import com.nnk.springboot.service.ruleName.IRuleNameService;
 
@@ -75,11 +76,20 @@ public class RuleNameController extends AbstractCrudController<RuleName, RuleNam
         ruleNameService.deleteById(id);
     }
 
+    // méthodes spécifiques à l'entité ruleName => non généralistes : name unique.
+
     @PostMapping("/validate")
     public String submitCreateForm(@Valid @ModelAttribute("ruleName") RuleNameCreateRequestDto dto,
                                    BindingResult result, 
                                    Model model) {
-        return create(dto, result, model);
+        log.debug("PostMapping/submitCreateForm,RuleNameCreateRequestDto="+dto);
+        
+        try {
+            return create(dto, result, model);
+        } catch (RuleNameAlreadyExistsException ex) {
+            result.rejectValue("name", "error.user", ex.getMessage());
+            return "ruleName/add";
+        }
     }
 
     @PostMapping("/update/{id}")
@@ -87,7 +97,15 @@ public class RuleNameController extends AbstractCrudController<RuleName, RuleNam
                                    @Valid @ModelAttribute("ruleName") RuleNameUpdateRequestDto dto,
                                    BindingResult result,
                                    Model model) {
-        return update(id, dto, result, model);
+        log.debug("PostMapping/submitUpdateForm,id="+id+",RuleNameUpdateRequestDto="+dto);
+        
+        try {
+            return update(id, dto, result, model);
+        } catch (RuleNameAlreadyExistsException ex) {
+            result.rejectValue("name", "error.user", ex.getMessage());
+            return "ruleName/update";
+        }
+        
     }
 }
 

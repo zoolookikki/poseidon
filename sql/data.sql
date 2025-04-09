@@ -75,7 +75,7 @@ CREATE TABLE ratings (
 
 CREATE TABLE rule_names (
   id INT NOT NULL AUTO_INCREMENT,
-  name VARCHAR(125) NOT NULL,
+  name VARCHAR(125) NOT NULL UNIQUE,
   description VARCHAR(125) NOT NULL,
   json VARCHAR(125),
   template VARCHAR(512),
