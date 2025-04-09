@@ -1,5 +1,5 @@
 
-CREATE TABLE bid_lists (
+CREATE TABLE bids (
   id INT NOT NULL AUTO_INCREMENT,
   account VARCHAR(30) NOT NULL,
   type VARCHAR(30) NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE bid_lists (
   bid DOUBLE ,
   ask DOUBLE,
   benchmark VARCHAR(125),
-  bid_list_date TIMESTAMP,
+  bid_date TIMESTAMP,
   commentary VARCHAR(125),
   security VARCHAR(125),
   status VARCHAR(10),
@@ -73,7 +73,7 @@ CREATE TABLE ratings (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE rule_names (
+CREATE TABLE rules (
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(125) NOT NULL UNIQUE,
   description VARCHAR(125) NOT NULL,

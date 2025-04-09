@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Home</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css" >
+</head>
+<body>
+<div class="container">
+
+    <div class="row">
+        <h2>Update Rule</h2>
+    </div>
+
+    <div class="row">
+        <form th:action="@{/rule/update/{id}(id=${rule.id})}" th:object="${rule}" method="post" class="form-horizontal" style="width: 100%">
+            <div th:replace="~{fragments/rule/form :: form(true)}"></div>
+        </form>
+    </div>
+
+</div>
+</body>
+</html>

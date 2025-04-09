@@ -76,7 +76,7 @@ public class SpringSecurityConfiguration {
                 .formLogin(form -> form
                         // la page personnalisée.
                         .loginPage("/login")
-                        .defaultSuccessUrl("/bidList/list", true)
+                        .defaultSuccessUrl("/bid/list", true)
                         .failureUrl("/login?error=true")
                         // permet de définir un gestionnaire personnalisé qui sera exécuté après une connexion réussie afin de rediriger dynamiquement l'utilisateur selon son rôle.
                         // n'est plus utilisée pour le moment ==> voir remarque sur la méthode authenticationSuccessHandler.

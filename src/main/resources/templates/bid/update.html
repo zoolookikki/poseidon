@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8"/>
+<title>Home</title>
+<link rel="stylesheet" href="../../css/bootstrap.min.css" >
+</head>
+<body>
+<div class="container">
+    
+    <div class="row">
+        <h2>Update Bid</h2>
+    </div>
+
+    <div class="row">
+        <form th:action="@{/bid/update/{id}(id=${bid.id})}" th:object="${bid}" method="post" class="form-horizontal" style="width: 100%">
+            <div th:replace="~{fragments/bid/form :: form(true)}"></div>
+        </form>
+    </div>
+
+</div>
+</body>
+</html>
