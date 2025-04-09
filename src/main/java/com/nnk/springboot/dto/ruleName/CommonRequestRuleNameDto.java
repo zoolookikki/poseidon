@@ -7,11 +7,11 @@ import lombok.Data;
 @Data
 public abstract class CommonRequestRuleNameDto {
 
-    @NotBlank(message = "Name is mandatory")
+    @NotBlank(message = "This field is required")
     @Size(max = 125, message = "Maximum length: 125 characters")
     private String name;
 
-    @NotBlank(message = "Description is mandatory")
+    @NotBlank(message = "This field is required")
     @Size(max = 125, message = "Maximum length: 125 characters")
     private String description;
 

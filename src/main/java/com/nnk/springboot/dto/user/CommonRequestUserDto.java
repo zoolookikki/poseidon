@@ -8,26 +8,26 @@ import lombok.Data;
 @Data
 public abstract class CommonRequestUserDto {
 
-    @NotBlank(message = "Username is mandatory")
+    @NotBlank(message = "This field is required")
     @Size(max = 125, message = "Maximum length: 125 characters")
     @Pattern(
             regexp = "^[A-Za-zÀ-ÖØ-öø-ÿ0-9 -]+$",
-            message = "The username must only contain letters, numbers, spaces or hyphens."
+            message = "Must only contain letters, numbers, spaces or hyphens."
     )
     private String username;
 
-    @NotBlank(message = "FullName is mandatory")
+    @NotBlank(message = "This field is required")
     @Size(max = 125, message = "Maximum length: 125 characters")
     @Pattern(
             regexp = "^[A-Za-zÀ-ÖØ-öø-ÿ0-9 -]+$",
-            message = "The fullname must only contain letters, numbers, spaces or hyphens."
+            message = "Must only contain letters, numbers, spaces or hyphens."
     )
     private String fullname;
 
-    @NotBlank(message = "Role is mandatory")
+    @NotBlank(message = "This field is required")
     @Pattern(
             regexp = "^(USER|ADMIN)$",
-            message = "Role must be either 'USER' or 'ADMIN'"
+            message = "Must be either 'USER' or 'ADMIN'"
     )
     private String role;
 

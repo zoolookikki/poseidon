@@ -21,7 +21,7 @@ public class CurvePoint {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    // Référence de la courbe à laquelle appartient ce point (1, 2, 3, etc...)
+    // Référence de la courbe à laquelle appartient ce point (1, 2, 3, etc...) => de 0 à 255 (1 à 255 réellement)
     private Integer curveId;
 
     // Date de validité du point.

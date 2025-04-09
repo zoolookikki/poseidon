@@ -29,5 +29,6 @@ public class Rating {
     // Notation attribuée par Fitch.
     private String fitchRating;
 
+    // indice d'ordre lié à la qualité du crédit => de 0 à 255 (1 à 255 réellement)
     private Integer orderNumber;
 }
