@@ -52,8 +52,8 @@
     
     <div class="form-group">
         <div class="col-sm-12">
-            <a class="btn btn-danger btn-sm" href="/rule/list">Cancel</a>
-            <input class="btn btn-primary btn-sm" type="submit" value="Add Rule">
+            <a class="btn btn-danger btn-sm" href="/ruleName/list">Cancel</a>
+            <input class="btn btn-primary btn-sm" type="submit" th:value="${update} ? 'Update Rule' : 'Add Rule'">
         </div>
     </div>
 
