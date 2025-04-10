@@ -62,12 +62,12 @@ public class RuleController extends AbstractCrudController<Rule, RuleDto, RuleCr
     }
 
     @Override
-    protected RuleDto add(RuleCreateRequestDto dto) {
+    protected RuleDto addEntity(RuleCreateRequestDto dto) {
         return ruleService.add(dto);
     }
 
     @Override
-    protected RuleDto update(Integer id, RuleUpdateRequestDto dto) {
+    protected RuleDto updateEntity(Integer id, RuleUpdateRequestDto dto) {
         return ruleService.update(id, dto);
     }
 

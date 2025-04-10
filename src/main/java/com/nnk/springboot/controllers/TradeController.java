@@ -61,12 +61,12 @@ public class TradeController extends AbstractCrudController<Trade, TradeDto, Tra
     }
 
     @Override
-    protected TradeDto add(TradeCreateRequestDto dto) {
+    protected TradeDto addEntity(TradeCreateRequestDto dto) {
         return tradeService.add(dto);
     }
 
     @Override
-    protected TradeDto update(Integer id, TradeUpdateRequestDto dto) {
+    protected TradeDto updateEntity(Integer id, TradeUpdateRequestDto dto) {
         return tradeService.update(id, dto);
     }
 

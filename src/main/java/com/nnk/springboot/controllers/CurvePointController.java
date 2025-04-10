@@ -61,12 +61,12 @@ public class CurvePointController extends AbstractCrudController<CurvePoint, Cur
     }
 
     @Override
-    protected CurvePointDto add(CurvePointCreateRequestDto dto) {
+    protected CurvePointDto addEntity(CurvePointCreateRequestDto dto) {
         return curvePointService.add(dto);
     }
 
     @Override
-    protected CurvePointDto update(Integer id, CurvePointUpdateRequestDto dto) {
+    protected CurvePointDto updateEntity(Integer id, CurvePointUpdateRequestDto dto) {
         return curvePointService.update(id, dto);
     }
 

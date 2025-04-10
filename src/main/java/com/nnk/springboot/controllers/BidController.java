@@ -61,12 +61,12 @@ public class BidController extends AbstractCrudController<Bid, BidDto, BidCreate
     }
 
     @Override
-    protected BidDto add(BidCreateRequestDto dto) {
+    protected BidDto addEntity(BidCreateRequestDto dto) {
         return bidService.add(dto);
     }
 
     @Override
-    protected BidDto update(Integer id, BidUpdateRequestDto dto) {
+    protected BidDto updateEntity(Integer id, BidUpdateRequestDto dto) {
         return bidService.update(id, dto);
     }
 

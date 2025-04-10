@@ -21,8 +21,8 @@ public abstract class AbstractCrudController<ENTITY, DTO, CREATE_DTO, UPDATE_DTO
     protected abstract ENTITY getById(Integer id);
     protected abstract UPDATE_DTO getUpdateDto(ENTITY entity);
     protected abstract void deleteById(Integer id);
-    protected abstract DTO add(CREATE_DTO dto);
-    protected abstract DTO update(Integer id, UPDATE_DTO dto);
+    protected abstract DTO addEntity(CREATE_DTO dto);
+    protected abstract DTO updateEntity(Integer id, UPDATE_DTO dto);
     
     // méthodes internes.
     
@@ -80,7 +80,7 @@ public abstract class AbstractCrudController<ENTITY, DTO, CREATE_DTO, UPDATE_DTO
             return view("add");
         }
         
-        add(dto);
+        addEntity(dto);
         
         return "redirect:/" + getEntityName() + "/list";
     }
@@ -93,7 +93,7 @@ public abstract class AbstractCrudController<ENTITY, DTO, CREATE_DTO, UPDATE_DTO
             return view("update");
         }
         
-        update(id, dto);
+        updateEntity(id, dto);
         
         return "redirect:/" + getEntityName() + "/list";
     }

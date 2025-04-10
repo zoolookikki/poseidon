@@ -69,12 +69,12 @@ public class UserController extends AbstractCrudController<User, UserDto, UserCr
     }
 
     @Override
-    protected UserDto add(UserCreateRequestDto dto) {
+    protected UserDto addEntity(UserCreateRequestDto dto) {
         return userService.add(dto);
     }
 
     @Override
-    protected UserDto update(Integer id, UserUpdateRequestDto dto) {
+    protected UserDto updateEntity(Integer id, UserUpdateRequestDto dto) {
         return userService.update(id, dto);
     }
 

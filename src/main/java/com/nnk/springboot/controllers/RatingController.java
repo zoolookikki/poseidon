@@ -61,12 +61,12 @@ public class RatingController extends AbstractCrudController<Rating, RatingDto, 
     }
 
     @Override
-    protected RatingDto add(RatingCreateRequestDto dto) {
+    protected RatingDto addEntity(RatingCreateRequestDto dto) {
         return ratingService.add(dto);
     }
 
     @Override
-    protected RatingDto update(Integer id, RatingUpdateRequestDto dto) {
+    protected RatingDto updateEntity(Integer id, RatingUpdateRequestDto dto) {
         return ratingService.update(id, dto);
     }
 
