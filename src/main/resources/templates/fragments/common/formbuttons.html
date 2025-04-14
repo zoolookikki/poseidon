@@ -1,0 +1,8 @@
+<div th:fragment="formButtons(path, update, entityName)">
+    <div class="form-group">
+        <div class="col-sm-12">
+            <a class="btn btn-danger btn-sm" th:href="@{${path}}">Cancel</a>
+            <input class="btn btn-primary btn-sm" type="submit" th:value="${update} ? 'Update ' + ${entityName} : 'Add ' + ${entityName}">
+        </div>
+    </div>
+</div>

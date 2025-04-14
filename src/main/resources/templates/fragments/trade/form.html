@@ -26,11 +26,6 @@
     </div>
     
     <!-- Submit -->
-    <div class="form-group">
-        <div class="col-sm-12">
-            <a class="btn btn-danger btn-sm" th:href="@{/trade/list}">Cancel</a>
-            <input class="btn btn-primary btn-sm" type="submit" th:value="${update} ? 'Update Trade' : 'Add Trade'">
-        </div>
-    </div>
+    <div th:replace="~{fragments/common/formbuttons :: formButtons('/trade/list', ${update}, 'Trade')}"></div>
     
 </div>

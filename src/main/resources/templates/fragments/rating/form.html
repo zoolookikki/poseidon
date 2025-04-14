@@ -37,12 +37,7 @@
     </div>
     
     <!-- Submit -->
-    <div class="form-group">
-        <div class="col-sm-12">
-            <a class="btn btn-danger btn-sm" th:href="@{/rating/list}">Cancel</a>
-            <input class="btn btn-primary btn-sm" type="submit" th:value="${update} ? 'Update Rating' : 'Add Rating'">
-        </div>
-    </div>
+    <div th:replace="~{fragments/common/formbuttons :: formButtons('/rating/list', ${update}, 'Rating')}"></div>
 
 </div>
     

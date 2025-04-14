@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<!-- template réutilisable qui accepte un paramètre (content) -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout(content)">
+<head>
+    <meta charset="UTF-8">
+    <title>Poseidon App</title>
+    <!-- syntaxe pour générer automatiquement le bon chemin --> 
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div class="container">
+    <!-- ici le contenu de chaque page est injecté -->
+    <div th:replace="${content}"></div>
+</div>
+</body>
+</html>

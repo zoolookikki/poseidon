@@ -36,11 +36,6 @@
     </div>
 
     <!-- Submit -->
-    <div class="form-group">
-        <div class="col-sm-12">
-            <a class="btn btn-danger btn-sm" th:href="@{/bid/list}">Cancel</a>
-            <input class="btn btn-primary btn-sm" type="submit" th:value="${update} ? 'Update Bid List' : 'Add Bid List'">
-        </div>
-    </div>
+    <div th:replace="~{fragments/common/formbuttons :: formButtons('/bid/list', ${update}, 'Bid List')}"></div>
 
 </div>

@@ -36,11 +36,6 @@
     </div>
 
     <!-- Submit -->
-    <div class="form-group">
-        <div class="col-sm-12">
-            <a class="btn btn-danger btn-sm" th:href="@{/curvePoint/list}">Cancel</a>
-            <input class="btn btn-primary btn-sm" type="submit" th:value="${update} ? 'Update Curve Point' : 'Add Curve Point'">
-        </div>
-    </div>
+    <div th:replace="~{fragments/common/formbuttons :: formButtons('/curvePoint/list', ${update}, 'Curve Point')}"></div>
     
 </div>

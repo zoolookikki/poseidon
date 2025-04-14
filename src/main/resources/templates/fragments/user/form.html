@@ -51,10 +51,6 @@
     </div>
 
     <!-- Submit -->
-    <div class="form-group">
-        <div class="col-sm-12">
-            <a class="btn btn-danger btn-sm" th:href="@{/user/list}">Cancel</a>
-            <input class="btn btn-primary btn-sm" type="submit" th:value="${update} ? 'Update User' : 'Add User'">
-        </div>
-    </div>
+    <div th:replace="~{fragments/common/formbuttons :: formButtons('/user/list', ${update}, 'User')}"></div>
+    
 </div>

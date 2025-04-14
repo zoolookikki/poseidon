@@ -1,43 +1,47 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" 
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8"/>
-    <title>Home</title>
-    <link rel="stylesheet" href="../../css/bootstrap.min.css">
-</head>
-<body>
-<div class="container">
+<!-- le contenu de cette page html est remplacée par base.html dans laquelle on lui injecte "content" -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/common/base :: layout(~{::content})}">
+
+<!-- ce qui est injecté dans base.html -->
+<div th:fragment="content">
+
     <!-- Menu -->
     <div th:replace="~{fragments/common/navbar :: navbar}"></div>
-    <div class="row"><h2>Bid List</h2></div>
+
+    <div class="row">
+        <h2>Bid List</h2>
+    </div>
+
     <div class="row">
         <a href="/bid/add" class="btn btn-primary btn-sm">Add New</a>
         <table class="table table-bordered">
             <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Account</th>
-                    <th>Type</th>
-                    <th>Bid Quantity</th>
-                    <th>Action</th>
-                </tr>
+            <tr>
+                <th>Id</th>
+                <th>Account</th>
+                <th>Type</th>
+                <th>Bid Quantity</th>
+                <th>Action</th>
+            </tr>
             </thead>
             <tbody>
-                <tr th:each="bid : ${bids}">
-                    <td style="width: 10%" th:text="${bid.id}"></td>
-                    <td th:text="${bid.account}"></td>
-                    <td th:text="${bid.type}"></td>
-                    <!-- #numbers.formatDecimal(number, minIntegerDigits, minFractionDigits) -->
-                    <td th:text="${#numbers.formatDecimal(bid.bidQuantity, 1, 2)}"></td> 
-                    <td style="width: 15%" class="text-center">
-                        <a th:href="@{/bid/update/{id}(id=${bid.id})}">Edit</a>&nbsp;|&nbsp;
-                        <a th:href="@{/bid/delete/{id}(id=${bid.id})}">Delete</a>
-                    </td>
-                </tr>
+            <tr th:each="bid : ${bids}">
+                <td style="width: 10%" th:text="${bid.id}"></td>
+                <td th:text="${bid.account}"></td>
+                <td th:text="${bid.type}"></td>
+                <!-- #numbers.formatDecimal(number, minIntegerDigits, minFractionDigits) -->
+                <td th:text="${#numbers.formatDecimal(bid.bidQuantity, 1, 2)}"></td>
+                <td style="width: 15%" class="text-center">
+                    <a th:href="@{/bid/update/{id}(id=${bid.id})}">Edit</a> |
+                    <a th:href="@{/bid/delete/{id}(id=${bid.id})}">Delete</a>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>
+
 </div>
-</body>
+
 </html>

@@ -1,16 +1,19 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" 
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="utf-8"/>
-<title>Home</title>
-<link rel="stylesheet" href="../../css/bootstrap.min.css" >
-</head>
-<body>
-<div class="container">
+<!-- le contenu de cette page html est remplacée par base.html dans laquelle on lui injecte "content" -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/common/base :: layout(~{::content})}">
+
+<!-- ce qui est injecté dans base.html -->
+<div th:fragment="content">
+
     <!-- Menu -->
     <div th:replace="~{fragments/common/navbar :: navbar}"></div>
-    <div class="row"><h2>Rating List</h2></div>
+
+    <div class="row">
+        <h2>Rating List</h2>
+    </div>
+    
     <div class="row">
         <a href="/rating/add" class="btn btn-primary btn-sm">Add New</a>
         <table class="table table-bordered">
@@ -39,6 +42,7 @@
             </tbody>
         </table>
     </div>
+    
 </div>
-</body>
+
 </html>
