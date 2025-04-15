@@ -32,10 +32,7 @@
                     <td th:text="${user.fullname}"></td>
                     <td th:text="${user.username}"></td>
                     <td style="width: 25%" th:text="${user.role}"></td>
-                    <td style="width: 15%" class="text-center">
-                        <a th:href="@{/user/update/{id}(id=${user.id})}">Edit</a>&nbsp;|&nbsp;
-                        <a th:href="@{/user/delete/{id}(id=${user.id})}">Delete</a>
-                    </td>
+                    <div th:replace="~{fragments/common/actionsbuttons :: actions('user', ${user.id})}"></div>
                 </tr>
             </tbody>
         </table>

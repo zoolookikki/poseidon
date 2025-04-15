@@ -33,10 +33,7 @@
                 <td th:text="${bid.type}"></td>
                 <!-- #numbers.formatDecimal(number, minIntegerDigits, minFractionDigits) -->
                 <td th:text="${#numbers.formatDecimal(bid.bidQuantity, 1, 2)}"></td>
-                <td style="width: 15%" class="text-center">
-                    <a th:href="@{/bid/update/{id}(id=${bid.id})}">Edit</a> |
-                    <a th:href="@{/bid/delete/{id}(id=${bid.id})}">Delete</a>
-                </td>
+                <div th:replace="~{fragments/common/actionsbuttons :: actions('bid', ${bid.id})}"></div>
             </tr>
             </tbody>
         </table>

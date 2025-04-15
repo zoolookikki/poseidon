@@ -1,0 +1,6 @@
+<div th:fragment="actions(path, id)">
+    <td style="width: 15%" class="text-center">
+        <a th:href="${'/'+path+'/update/'+id}">Edit</a> |
+        <a th:href="${'/'+path+'/delete/'+id}" onclick="return confirm('Are you sure?');">Delete</a>
+    </td>
+</div>

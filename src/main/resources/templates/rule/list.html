@@ -38,10 +38,7 @@
                     <td th:text="${rule.template}"></td>
                     <td th:text="${rule.sqlStr}"></td>
                     <td th:text="${rule.sqlPart}"></td>
-                    <td style="width: 15%" class="text-center">
-                        <a th:href="@{/rule/update/{id}(id=${rule.id})}">Edit</a>&nbsp;|&nbsp;
-                        <a th:href="@{/rule/delete/{id}(id=${rule.id})}">Delete</a>
-                    </td>
+                    <div th:replace="~{fragments/common/actionsbuttons :: actions('rule', ${rule.id})}"></div>
                 </tr>
             </tbody>
         </table>
