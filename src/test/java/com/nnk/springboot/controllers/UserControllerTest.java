@@ -56,7 +56,7 @@ public class UserControllerTest {
     private UserCreateRequestDto userCreateDto;
     private UserUpdateRequestDto userUpdateDto;
     
-    // because MockMvc is not automatically configured in a @WebMvcTest unit test.
+    // Pour que MockMvc soit injecté dans le test pour pouvoir l’utiliser.
     @Autowired
     private MockMvc mockMvc;
 
