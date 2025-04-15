@@ -6,8 +6,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.nnk.springboot.mapper.IMapper;
-
-import jakarta.persistence.EntityNotFoundException;
+import com.nnk.springboot.exception.EntityNotFoundException;
 
 public abstract class AbstractCrudService<ENTITY, DTO, CREATE_DTO, UPDATE_DTO> {
 
