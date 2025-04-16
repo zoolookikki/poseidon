@@ -18,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.context.MessageSource;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplTest {
@@ -54,6 +56,9 @@ public class UserServiceImplTest {
 
     @Mock
     private BCryptPasswordEncoder passwordEncoder;
+    
+    @Mock
+    private MessageSource messageSource;
 
     @BeforeEach
     void setup() {
@@ -157,6 +162,7 @@ public class UserServiceImplTest {
     public void addWhenUsernameAlreadyExistsTest() {
         // given
         when(userRepository.findByUsername(user1.getUsername())).thenReturn(Optional.of(user1));
+        when(messageSource.getMessage(any(), any(), any())).thenReturn("The name "+userCreateDto1.getUsername()+" is already in use");
 
         // when then
         assertThatThrownBy(() -> userService.add(userCreateDto1))
@@ -190,6 +196,7 @@ public class UserServiceImplTest {
         // given
         when(userRepository.findById(user1.getId())).thenReturn(Optional.of(user1));
         when(userRepository.findByUsername(userUpdateDto1.getUsername())).thenReturn(Optional.of(user3));
+        when(messageSource.getMessage(any(), any(), any())).thenReturn("The name "+userUpdateDto1.getUsername()+" is already in use");
 
         // when then
         assertThatThrownBy(() -> userService.update(user1.getId(), userUpdateDto1))
