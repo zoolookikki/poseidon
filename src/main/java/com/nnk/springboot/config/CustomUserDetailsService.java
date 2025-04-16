@@ -6,7 +6,6 @@ import java.util.List;
 import com.nnk.springboot.domain.User;
 import com.nnk.springboot.repositories.UserRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,8 +25,12 @@ Il implémente UserDetailsService, une interface de Spring Security qui permet d
 @Log4j2
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    // pas d'@Autowired pour pouvoir faire le test unitaire sinon compliqué.
+    private final UserRepository userRepository;
+    
+    public CustomUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }    
 
     // Crée une liste d’autorités => Cette méthode transforme le rôle de l’utilisateur en une autorité compréhensible par Spring Security
     private List<SimpleGrantedAuthority> getGrantedAuthorities(String role) {
