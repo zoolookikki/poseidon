@@ -5,7 +5,7 @@
       th:fragment="layout(content)">
 <head>
     <meta charset="UTF-8">
-    <title>Poseidon App</title>
+    <title th:text="#{app.title}"></title>
     <!-- syntaxe pour générer automatiquement le bon chemin --> 
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 </head>

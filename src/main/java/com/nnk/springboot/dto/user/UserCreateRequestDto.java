@@ -23,8 +23,8 @@ Idem pour toString().
 @ToString(callSuper = true)
 public class UserCreateRequestDto extends CommonRequestUserDto{
 
-    @NotBlank(message = "Password is mandatory")
-    @Size(max = 125, message = "Password must not exceed 125 characters")
+    @NotBlank(message = "{validation.password.required}")
+    @Size(max = 125, message = "{validation.password.maxlength}")
     /*
     (?=.*[A-Z]) : au moins une majuscule.
     (?=.*\\d) : au moins un chiffre.
@@ -33,7 +33,7 @@ public class UserCreateRequestDto extends CommonRequestUserDto{
     */
     @Pattern(
             regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$",
-            message = "Password must contain at least 8 characters, one uppercase letter, one number and one special character."
+            message = "{validation.password.pattern}"
     )
     private String password;
 

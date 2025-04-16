@@ -2,6 +2,8 @@ package com.nnk.springboot.service.user;
 
 import java.util.Optional;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,17 +27,31 @@ public class UserServiceImpl
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final BCryptPasswordEncoder passwordEncoder;
-
+    private final MessageSource messageSource;
+    
     public UserServiceImpl(
             UserRepository userRepository,
             UserMapper userMapper,
-            BCryptPasswordEncoder passwordEncoder) {
+            BCryptPasswordEncoder passwordEncoder,
+            MessageSource messageSource) {
         super(userRepository, userMapper);
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
+        this.messageSource = messageSource;
     }
 
+    // pour que le message "utilisateur déjà existant" soit internationalisé.
+    private void throwUsernameExists(String username) {
+        String errorMessage = messageSource.getMessage(
+            "error.username.exists",
+            new Object[]{username},
+            LocaleContextHolder.getLocale()
+        );
+        throw new UsernameAlreadyExistsException(errorMessage);
+    }
+    
+    
     /*
     add spécifique pour User car :
         - contrôle sur le userName si il existe déjà.
@@ -45,7 +61,8 @@ public class UserServiceImpl
     public UserDto add(UserCreateRequestDto dto) {
         // vérification que le username est unique.
         if (userRepository.findByUsername(dto.getUsername()).isPresent()) {
-            throw new UsernameAlreadyExistsException("The name "+dto.getUsername()+" is already in use");
+//            throw new UsernameAlreadyExistsException("The name "+dto.getUsername()+" is already in use");
+            throwUsernameExists(dto.getUsername());
         }
 
         User user = userMapper.fromCreateRequestDto(dto);
@@ -68,7 +85,8 @@ public class UserServiceImpl
         // vérification que le username est unique.
         Optional<User> sameUsername = userRepository.findByUsername(dto.getUsername());
         if (sameUsername.isPresent() && !sameUsername.get().getId().equals(id)) {
-            throw new UsernameAlreadyExistsException("The name "+dto.getUsername()+" is already in use");
+//            throw new UsernameAlreadyExistsException("The name "+dto.getUsername()+" is already in use");
+            throwUsernameExists(dto.getUsername());
         }
 
         user.setUsername(dto.getUsername());
