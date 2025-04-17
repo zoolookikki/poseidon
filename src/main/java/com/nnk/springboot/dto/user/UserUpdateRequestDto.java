@@ -16,14 +16,14 @@ public class UserUpdateRequestDto extends CommonRequestUserDto{
 
     private Integer id;
 
-    @Size(max = 125, message = "{validation.password.maxlength}")
+    @Size(max = 125, message = "{validation.max.length}")
     /*
     Attention, ici, le mot de passe n'est pas obligatoire car on le modifie que si il est saisi => ^$| (vide ou ...)
     voir UserCreateRequestDto pour commentaires sur le reste.
     */
     @Pattern(
             regexp = "^$|^(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$",
-            message = "{validation.password.pattern}"
+            message = "{validation.pattern.password}"
     )
     private String password;
 
