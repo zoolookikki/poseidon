@@ -39,4 +39,11 @@ public class CurvePoint {
     // Spécificité Hibernate : remplis automatiquement le champ avec la date/heure au moment de l’insertion uniquement.
     @CreationTimestamp
     private Instant creationDate;
+    
+    // Constructeur utilisé pour le test d'intégration du repository.
+    public CurvePoint(Integer curveId, Double term, Double valuePoint) {
+        this.curveId = curveId;
+        this.term = term;
+        this.valuePoint = valuePoint;
+    }    
 }

@@ -78,4 +78,11 @@ public class Trade {
 
     @Column(length = 125)
     private String side;
+    
+    // Constructeur utilisé pour le test d'intégration du repository.
+    public Trade(String account, String type, Double buyQuantity) {
+        this.account = account;
+        this.type = type;
+        this.buyQuantity = buyQuantity; 
+    }
 }
