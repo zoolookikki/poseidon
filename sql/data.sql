@@ -57,7 +57,7 @@ CREATE TABLE curve_points (
   curve_id TINYINT UNSIGNED NOT NULL,
   as_of_date TIMESTAMP,
   term DOUBLE NOT NULL,
-  value DOUBLE NOT NULL,
+  value_point DOUBLE NOT NULL,
   creation_date TIMESTAMP,
 
   PRIMARY KEY (id)

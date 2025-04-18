@@ -32,7 +32,7 @@
                     <td th:text="${curvePoint.curveId}"></td>
                     <!-- #numbers.formatDecimal(number, minIntegerDigits, minFractionDigits) -->
                     <td th:text="${#numbers.formatDecimal(curvePoint.term, 1, 2)}"></td>
-                    <td th:text="${#numbers.formatDecimal(curvePoint.value, 1, 2)}"></td>
+                    <td th:text="${#numbers.formatDecimal(curvePoint.valuePoint, 1, 2)}"></td>
                     <div th:replace="~{fragments/common/actionsbuttons :: actions('curvePoint', ${curvePoint.id})}"></div>
                 </tr>
             </tbody>

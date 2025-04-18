@@ -13,6 +13,6 @@ public class CurvePointDto {
     private Integer id;
     private Integer curveId;
     private Double term;
-    private Double value;
+    private Double valuePoint;
     
 }

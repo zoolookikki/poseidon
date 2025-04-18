@@ -34,7 +34,7 @@ public class CurvePoint {
 
     // La valeur au terme en % ou en valeur.
     @Column(nullable = false)
-    private Double value;
+    private Double valuePoint;
 
     // Spécificité Hibernate : remplis automatiquement le champ avec la date/heure au moment de l’insertion uniquement.
     @CreationTimestamp

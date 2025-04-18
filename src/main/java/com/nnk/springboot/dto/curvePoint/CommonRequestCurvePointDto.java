@@ -22,6 +22,6 @@ public abstract class CommonRequestCurvePointDto {
     
     @NotNull(message = "This field is required")
     @DecimalMin(value = "0.01", message = "Must be at least 0.01")
-    private Double value;
+    private Double valuePoint;
     
 }
