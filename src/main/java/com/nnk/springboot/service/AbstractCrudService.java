@@ -6,6 +6,9 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.nnk.springboot.mapper.IMapper;
+
+import lombok.extern.log4j.Log4j2;
+
 import com.nnk.springboot.exception.EntityNotFoundException;
 
 /**
@@ -34,6 +37,7 @@ import com.nnk.springboot.exception.EntityNotFoundException;
  * @param <CREATE_DTO>   the type of DTO used during creation
  * @param <UPDATE_DTO>   the type of DTO used during the update
  */
+@Log4j2
 public abstract class AbstractCrudService<ENTITY, DTO, CREATE_DTO, UPDATE_DTO> {
 
     protected final JpaRepository<ENTITY, Integer> repository;
@@ -53,6 +57,7 @@ public abstract class AbstractCrudService<ENTITY, DTO, CREATE_DTO, UPDATE_DTO> {
      */
     public List<DTO> findAll() {
         List<ENTITY> entitys = repository.findAll();
+        log.debug("findAll,entitys.size={}", entitys.size());
         List<DTO> dtos = new ArrayList<>();
 
         for (ENTITY entity : entitys) {
@@ -70,9 +75,13 @@ public abstract class AbstractCrudService<ENTITY, DTO, CREATE_DTO, UPDATE_DTO> {
      * @throws EntityNotFoundException if no entity is found with this identifier
      */
     public ENTITY getById(Integer id) {
+        log.debug("getById,id={}", id);
         // exception car si l'id n'est pas trouvé, c'est une erreur grave.
         return repository.findById(id)
-                         .orElseThrow(() -> new EntityNotFoundException("findById error : id " + id + " not found"));
+                         .orElseThrow(() -> {
+                             log.debug("getById failed : id {} not found", id);
+                             return new EntityNotFoundException("findById error : id " + id + " not found");                             
+                         });
     }
 
     /**
@@ -83,10 +92,13 @@ public abstract class AbstractCrudService<ENTITY, DTO, CREATE_DTO, UPDATE_DTO> {
      */
     public void deleteById(Integer id) {
         if (!repository.existsById(id)) {
+            log.debug("deleteById failed : id {} not found", id);
             // exception car si l'id n'existe pas, c'est une erreur grave.
             throw new EntityNotFoundException("deleteById error : id " + id + " not found");
         }
+        
         repository.deleteById(id);
+        log.info("Entity with id {} deleted successfully", id);
     }
 
 
@@ -96,9 +108,14 @@ public abstract class AbstractCrudService<ENTITY, DTO, CREATE_DTO, UPDATE_DTO> {
      * @param dto the data necessary for the creation of the entity
      * @return the DTO representing the created entity
      */
-    public DTO add(CREATE_DTO dto) {
-        ENTITY entity = mapper.fromCreateRequestDto(dto);
-        return mapper.toDto(repository.save(entity));
+    public DTO add(CREATE_DTO createDto) {
+        log.debug("add,createDTO={}", createDto);
+        
+        ENTITY entity = mapper.fromCreateRequestDto(createDto);
+        DTO dto = mapper.toDto(repository.save(entity));
+        
+        log.info("Entity created successfully={}", dto);
+        return dto;
     }
 
     /**
@@ -108,11 +125,17 @@ public abstract class AbstractCrudService<ENTITY, DTO, CREATE_DTO, UPDATE_DTO> {
      * @param dto DTO containing the new values
      * @return the DTO representing the updated entity
      */
-    public DTO update(Integer id, UPDATE_DTO dto) {
+    public DTO update(Integer id, UPDATE_DTO updateDto) {
+        log.debug("update,id={},updateDTO={}", id, updateDto);
+        
         ENTITY entity = getById(id);
         
-        mapper.updateEntityFromDto(entity, dto);
+        // mise à jour de l'entité à partir de la dto.
+        mapper.updateEntityFromDto(entity, updateDto);
+        ENTITY updated = repository.save(entity);
+        DTO dto = mapper.toDto(updated);
         
-        return mapper.toDto(repository.save(entity));
+        log.info("Entity updated successfully={}", dto);
+        return dto; 
     }
 }

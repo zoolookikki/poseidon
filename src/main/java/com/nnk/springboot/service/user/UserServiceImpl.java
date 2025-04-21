@@ -59,8 +59,11 @@ public class UserServiceImpl
     */
     @Override
     public UserDto add(UserCreateRequestDto dto) {
+        log.debug("add,userCreateRequestDto="+dto);
+        
         // vérification que le username est unique.
         if (userRepository.findByUsername(dto.getUsername()).isPresent()) {
+            log.debug("The name "+dto.getUsername()+" is already in use");
 //            throw new UsernameAlreadyExistsException("The name "+dto.getUsername()+" is already in use");
             throwUsernameExists(dto.getUsername());
         }
@@ -68,7 +71,11 @@ public class UserServiceImpl
         User user = userMapper.fromCreateRequestDto(dto);
         // encodage du mot de passe.
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        return userMapper.toDto(userRepository.save(user));
+
+        UserDto userDto = userMapper.toDto(userRepository.save(user));
+        log.info("Entity created successfully={}", userDto);
+
+        return userDto;
     }
 
     /*
@@ -85,6 +92,7 @@ public class UserServiceImpl
         // vérification que le username est unique.
         Optional<User> sameUsername = userRepository.findByUsername(dto.getUsername());
         if (sameUsername.isPresent() && !sameUsername.get().getId().equals(id)) {
+            log.debug("The name "+dto.getUsername()+" is already in use");
 //            throw new UsernameAlreadyExistsException("The name "+dto.getUsername()+" is already in use");
             throwUsernameExists(dto.getUsername());
         }
@@ -98,7 +106,10 @@ public class UserServiceImpl
             user.setPassword(passwordEncoder.encode(dto.getPassword()));
         }
 
-        return userMapper.toDto(userRepository.save(user));
+        UserDto userDto = userMapper.toDto(userRepository.save(user)); 
+        log.info("Entity updated successfully={}", userDto);
+
+        return userDto;
     }
     
 }
