@@ -31,6 +31,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
@@ -92,7 +93,8 @@ public class SpringSecurityConfigurationTest {
     @DisplayName("le chemin pour le login est accessible sans authentification")
     void pathForLoginSuccessTest() throws Exception {
         // when then
-        mockMvc.perform(get("/login")).andExpect(status().isOk());
+        mockMvc.perform(get("/login")).andExpect(status().isOk())
+            .andExpect(view().name("login"));
     }
     
     @Test
