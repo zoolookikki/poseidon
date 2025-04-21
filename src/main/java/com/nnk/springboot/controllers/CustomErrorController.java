@@ -81,5 +81,4 @@ public class CustomErrorController implements ErrorController {
     public String getTestFail() {
         return "";
     }
-
 }

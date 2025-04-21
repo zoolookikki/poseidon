@@ -13,16 +13,17 @@ import org.springframework.security.web.SecurityFilterChain;
 /**
  * Configuring application security with Spring Security.
  * <p>
- * This class defines authentication and authorization rules by specifying access to different routes and user management methods.
+ * This class defines authentication and authorization rules by specifying access to different routes and user management methods, as well as behavior after login or logout.
  * </p>
  *
  * <p>
  * Key features include:
  * <ul>
- *     <li>Definition of access authorizations</li>
+ *     <li>Defining route access permissions based on user roles</li>
  *     <li>Customizing authentication and redirection after login</li>
  *     <li>Managing disconnection and session invalidation</li>
  *     <li>Configuring Password Encryption</li>
+ *     <li>Declaring a Custom AuthenticationManager</li>
  * </ul>
  * </p>
  */
@@ -36,6 +37,22 @@ public class SpringSecurityConfiguration {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
+    /**
+     * Defines the a set of safety rules used by Spring Security.
+     *
+     * <p>
+     * This method configures :
+     * <ul>
+     *     <li>Route access permissions (authorizeHttpRequests() : free access to /login, restriction to /user/** for ADMIN)</li>
+     *     <li>The custom login page and redirects after success or failure</li>
+     *     <li>Disconnection management (URL, session invalidation, cookie deletion)</li>
+     * </ul>
+     * </p>
+     *
+     * @param http object used to configure HTTP security
+     * @return the security filter chain
+     * @throws Exception if an error occurs during configuration
+     */
     /*
     @Bean est automatiquement détecté et exécuté par Spring lors du démarrage de l’application ==>
     Dans le démarrage de Spring Security, Spring cherche une configuration personnalisée.
@@ -44,14 +61,6 @@ public class SpringSecurityConfiguration {
     S’il n’en trouve pas, il applique une configuration de sécurité par défaut (tout est protégé).
    */
     @Bean
-    // SecurityFilterChain => un ensemble de règles de sécurité : collection de filtres de sécurité.
-    /*
-     HttpSecurity => permet de définir :
-         - Qui peut accéder à quelles routes (authorizeHttpRequests())
-         - Comment s’authentifier (formLogin(), httpBasic(), etc.)
-         - Comment se déconnecter (logout())
-         - Gestion des sessions (sessionManagement())
-    */
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 /*
@@ -101,15 +110,24 @@ public class SpringSecurityConfiguration {
                 .build();
     }
 
-    /*
-    Cette méthode permet d’indiquer à Spring Security d’utiliser la classe CustomUserDetailsService pour authentifier des utilisateurs
-    Cette méthode définit un AuthenticationManager personnalisé dans Spring Security
-    Un AuthenticationManager est le composant principal qui gère l’authentification des utilisateurs en validant leur nom d’utilisateur et leur mot de passe.
-    Spring utilisera ce AuthenticationManager pour l’authentification des utilisateurs.
-        HttpSecurity http : Permet d’accéder aux objets de configuration de sécurité Spring
-        BCryptPasswordEncoder bCryptPasswordEncoder : Utilisé pour vérifier les mots de passe hashés stockés en base de données.
-    */
+    /**
+     * This method tells Spring Security to use the CustomUserDetailsService class to define user authentication.
+     *
+     * <p>
+     * This authentication manager uses :
+     * <ul>
+     *     <li>A CustomUserDetailsService to load users from the database</li>
+     *     <li>A BCryptPasswordEncoder for comparing hashed passwords</li>
+     * </ul>
+     * </p>
+     *
+     * @param http (HttpSecurity) allows access to Spring security configuration objects
+     * @param bCryptPasswordEncoder the encoder used to verify hashed passwords stored in database
+     * @return a ready-to-use AuthenticationManager
+     * @throws Exception if an error occurs during configuration
+     */
     @Bean
+    // AuthenticationManager est le composant principal qui gère l’authentification des utilisateurs en validant leur nom d’utilisateur et leur mot de passe.
     public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder) throws Exception {
         // Récupère un AuthenticationManagerBuilder à partir de l’objet HttpSecurity => Récupère l'objet pour construire l’authentification.
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
@@ -131,18 +149,30 @@ public class SpringSecurityConfiguration {
         return authenticationManagerBuilder.build();
     }
 
+    /**
+     * Provides a password encoder based on the BCrypt algorithm.
+     *
+     * <p>
+     * BCrypt is a strong hashing algorithm, recommended for secure password storage.
+     * </p>
+     *
+     * @return an instance of BCryptPasswordEncoder
+     */
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // permet de personnaliser ce qui se passe après une connexion réussie.
-    // n'est plus utile pour le moment (classe AuthentificationHandler supprimée).
+    /*
+     * Allows dynamically redirecting the user after successful login depending on their role.
+     * This method is currently no longer used (AuthenticationHandler class removed).
+     *
+     * @return a custom authentication success handler
+     */
     /*
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return new AuthenticationHandler();
     }
     */
-
 }

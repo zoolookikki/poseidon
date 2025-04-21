@@ -16,13 +16,15 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * This service loads users from the database and integrates them with Spring Security.
+ *
+ * <p>
+ * This class implements UserDetailsService, an interface used by Spring Security to load a user's details from the database.
+ * </p>
+ *
  */
-/*
-Il implémente UserDetailsService, une interface de Spring Security qui permet d’authentifier les utilisateurs sur la base des informations contenues dans une base de données.
-!! ATTENTION : La configuration de Spring Security doit prendre en compte cette classe via un AuthenticationManager (voir SpringSecurityConfiguration.java).
-*/
 @Service
 @Log4j2
+// Cette classe doit être prise en compte dans la configuration de sécurité, notamment via un authentication.AuthenticationManager (voir SpringSecurityConfiguration.java).
 public class CustomUserDetailsService implements UserDetailsService {
 
     // pas d'@Autowired pour pouvoir faire le test unitaire sinon compliqué.
@@ -32,7 +34,16 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }    
 
-    // Crée une liste d’autorités => Cette méthode transforme le rôle de l’utilisateur en une autorité compréhensible par Spring Security
+    /**
+     * Creates a list of Spring Security authorities from the user's role.
+     *
+     * <p>
+     * This method converts a role (eg: "ADMIN") into an authority usable by Spring Security (eg: "ROLE_ADMIN").
+     * </p>
+     *
+     * @param role the role of the user
+     * @return a list of authorities corresponding to the role
+     */
     private List<SimpleGrantedAuthority> getGrantedAuthorities(String role) {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
@@ -40,10 +51,25 @@ public class CustomUserDetailsService implements UserDetailsService {
         return authorities;
     }
 
-    // Fonction à implémenter utilisée par Spring Security pour charger un utilisateur.
+    /**
+     * Loads a user by their username.
+     *
+     * <p>
+     * This method is automatically called by Spring Security during authentication.
+     * It searches for the user in the database, then returns a userdetails object containing:
+     * <ul>
+     *     <li>The username</li>
+     *     <li>The hashed password</li>
+     *     <li>The list of authorities regarding user roles</li>
+     * </ul>
+     * </p>
+     *
+     * @param username the username
+     * @return a UserDetails object representing the authenticated user
+     * @throws UsernameNotFoundException if the user is not found in the database
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // e-mail toujours en minuscule.
         log.debug("Recherche de l'utilisateur = {}", username);
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> {
@@ -52,13 +78,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                 });
         log.debug("Utilisateur trouvé : {}", user);
 
-        /*
-        Construit un objet User (de Spring Security) contenant :
-            - Le nom d’utilisateur
-            - Le mot de passe (hashé) 
-            - Les rôles de l’utilisateur
-        Le retour est un objet UserDetails, qui est une interface utilisée par Spring Security pour représenter un utilisateur authentifié.            
-        */
        // new org.springframework.security.core.userdetails.User pour éviter confusion avec model.User.
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
