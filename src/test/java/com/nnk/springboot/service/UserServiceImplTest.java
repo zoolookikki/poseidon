@@ -4,8 +4,8 @@ import com.nnk.springboot.domain.User;
 import com.nnk.springboot.dto.user.UserCreateRequestDto;
 import com.nnk.springboot.dto.user.UserDto;
 import com.nnk.springboot.dto.user.UserUpdateRequestDto;
-import com.nnk.springboot.exception.EntityNotFoundException;
 import com.nnk.springboot.exception.UsernameAlreadyExistsException;
+import com.nnk.springboot.mapper.IMapper;
 import com.nnk.springboot.mapper.UserMapper;
 import com.nnk.springboot.repositories.UserRepository;
 import com.nnk.springboot.service.user.UserServiceImpl;
@@ -13,12 +13,11 @@ import com.nnk.springboot.service.user.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.context.MessageSource;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,22 +30,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-
-@ExtendWith(MockitoExtension.class)
-public class UserServiceImplTest {
-
-    private User user1;
-    private User user2;
-    private User user3;
-    private UserDto userDto1;
-    private UserDto userDto2;
-    private UserCreateRequestDto userCreateDto1;
-    private UserUpdateRequestDto userUpdateDto1;
-    private User userUpdated1;
-    private UserDto userDtoUpdated1;
+public class UserServiceImplTest extends AbstractCrudServiceTest<User, UserDto, UserCreateRequestDto, UserUpdateRequestDto> {
 
     @InjectMocks
-    private UserServiceImpl userService; 
+    private UserServiceImpl userService;
 
     @Mock
     private UserRepository userRepository;
@@ -56,9 +43,16 @@ public class UserServiceImplTest {
 
     @Mock
     private BCryptPasswordEncoder passwordEncoder;
-    
+
     @Mock
     private MessageSource messageSource;
+
+    private User user1, user2, user3;
+    private UserDto userDto1, userDto2;
+    private UserCreateRequestDto userCreateDto1;
+    private UserUpdateRequestDto userUpdateDto1;
+    private User userUpdated1;
+    private UserDto userDtoUpdated1;
 
     @BeforeEach
     void setup() {
@@ -81,65 +75,64 @@ public class UserServiceImplTest {
         userDtoUpdated1 = new UserDto(1, "Johnny", "Full Johnny", "ADMIN");
     }
 
-    @Test
-    @DisplayName("recherche de la liste de tous les utilisateurs avec succès")
-    public void findAllUsersOkTest() {
-        // given
-        when(userRepository.findAll()).thenReturn(List.of(user1, user2));
-        when(userMapper.toDto(user1)).thenReturn(userDto1);
-        when(userMapper.toDto(user2)).thenReturn(userDto2);
-
-        // when
-        List<UserDto> result = userService.findAll();
-
-        // then
-        assertThat(result).hasSize(2)
-                .containsExactly(userDto1, userDto2);
-        verify(userRepository, times(1)).findAll();
+    @Override
+    protected User getEntity() {
+        return user1;
     }
     
-    @Test
-    @DisplayName("recherche de la liste de tous les utilisateurs en échec")
-    public void findAllUsersFailTest() {
-        // given
-        when(userRepository.findAll()).thenReturn(List.of());
-
-        // when
-        List<UserDto> result = userService.findAll();
-
-        // then
-        assertThat(result).isEmpty();
-        verify(userRepository, times(1)).findAll();
+    @Override
+    protected List<User> getEntities() {
+        return List.of(user1, user2);
     }
 
-    @Test
-    @DisplayName("recherche d'un utilisateur par son id avec succès")
-    public void findUserByIdSuccessTest() {
-        // given
-        when(userRepository.findById(1)).thenReturn(Optional.of(user1));
+    @Override
+    protected List<UserDto> getDtos() {
+        return List.of(userDto1, userDto2);
+    }
 
-        // when
-        User result = userService.getById(1);
+    @Override
+    protected AbstractCrudService<User, UserDto, UserCreateRequestDto, UserUpdateRequestDto> getService() {
+        return userService;
+    }
 
-        // then
-        assertThat(result.getId()).isEqualTo(1);
-        verify(userRepository, times(1)).findById(1);
+    @Override
+    protected JpaRepository<User, Integer> getRepository() {
+        return userRepository;
+    }
+
+    @Override
+    protected IMapper<User, UserDto, UserCreateRequestDto, UserUpdateRequestDto> getMapper() {
+        return userMapper;
     }
     
-    @Test
-    @DisplayName("recherche d'un utilisateur par son id en échec")
-    public void findUserByIdFailTest() {
-        // given
-        when(userRepository.findById(1)).thenReturn(Optional.empty());
-
-        // when then
-        assertThatThrownBy(() -> userService.getById(1))
-                .isInstanceOf(EntityNotFoundException.class);
-        verify(userRepository, times(1)).findById(1);
+    @Override
+    protected UserCreateRequestDto getCreateDto() {
+        return userCreateDto1;
     }
     
+    @Override
+    protected UserDto getExpectedCreatedDto() {
+        return userDto1;
+    }
+
+    @Override
+    protected UserUpdateRequestDto getUpdateDto() {
+        return userUpdateDto1;
+    }
+    @Override
+    protected User getUpdatedEntity() {
+        return userUpdated1;
+    }
+
+    @Override
+    protected UserDto getExpectedUpdatedDto() {
+        return userDtoUpdated1;
+    }
+
+    // méthodes spécifiques au métier.
+    
     @Test
-    @DisplayName("ajout d'un utilisateur avec succès")
+    @DisplayName("ajout d'un utilisateur avec succès (spécifique à User)")
     public void addOkTest() {
         // given
         when(userRepository.findByUsername(user1.getUsername())).thenReturn(Optional.empty());
@@ -158,7 +151,7 @@ public class UserServiceImplTest {
     }
     
     @Test
-    @DisplayName("ajout d'un utilisateur alors que le username existe déjà")
+    @DisplayName("ajout d'un utilisateur alors que le username existe déjà (spécifique à User)")
     public void addWhenUsernameAlreadyExistsTest() {
         // given
         when(userRepository.findByUsername(user1.getUsername())).thenReturn(Optional.of(user1));
@@ -170,9 +163,10 @@ public class UserServiceImplTest {
                 .hasMessageContaining("already in use");
         verify(userRepository, never()).save(user1);
     }
+    
 
     @Test
-    @DisplayName("modification d'un utilisateur avec succès")
+    @DisplayName("modification d'un utilisateur avec succès (spécifique à User)")
     public void updateOkTest() {
         // given
         when(userRepository.findById(user1.getId())).thenReturn(Optional.of(user1));
@@ -189,9 +183,9 @@ public class UserServiceImplTest {
         verify(userRepository, times(1)).findById(user1.getId());
         verify(userRepository, times(1)).save(any(User.class));
     }
-
+    
     @Test
-    @DisplayName("modification d'un utilisateur alors que le username existe déjà")
+    @DisplayName("modification d'un utilisateur alors que le username existe déjà (spécifique à User)")
     public void updateWhenUserNameAlreadyExistsTest() {
         // given
         when(userRepository.findById(user1.getId())).thenReturn(Optional.of(user1));
@@ -206,7 +200,7 @@ public class UserServiceImplTest {
     }
     
     @Test
-    @DisplayName("modification d'un utilisateur sans changer le username")
+    @DisplayName("modification d'un utilisateur sans changer le username (spécifique à User)")
     public void updateWithSameUsernameTest() {
         // given
         
@@ -229,9 +223,9 @@ public class UserServiceImplTest {
         verify(userRepository, times(1)).findById(user1.getId());
         verify(userRepository, times(1)).save(any(User.class));
     }
-    
+
     @Test
-    @DisplayName("modification d'un utilisateur sans changer le mot de passe")
+    @DisplayName("modification d'un utilisateur sans changer le mot de passe (spécifique à User)")
     public void updateWithoutPasswordModificationTest() {
         // given
         
@@ -254,33 +248,4 @@ public class UserServiceImplTest {
         // important de vérifier cela.
         verify(passwordEncoder, never()).encode(any());
     }
-    
-    @Test
-    @DisplayName("supression d'un utilisateur avec succès")
-    public void deleteOkTest() {
-        // given
-        when(userRepository.existsById(1)).thenReturn(true);
-        
-        // when
-        userService.deleteById(1);
-
-        // then
-        verify(userRepository, times(1)).existsById(1);
-        verify(userRepository, times(1)).deleteById(1);
-    }
-    
-    @Test
-    @DisplayName("supression d'un utilisateur en échec")
-    public void deleteFailTest() {
-        // given
-        when(userRepository.existsById(1)).thenReturn(false);
-
-        // when then
-        assertThatThrownBy(() -> userService.deleteById(1))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("not found");
-        verify(userRepository, times(1)).existsById(1);
-        verify(userRepository, never()).deleteById(1);
-    }
-    
 }

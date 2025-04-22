@@ -40,8 +40,14 @@ public class CurvePoint {
     @CreationTimestamp
     private Instant creationDate;
     
-    // Constructeur utilisé pour le test d'intégration du repository.
+    // Constructeur utilisé pour le test d'intégration du repository
     public CurvePoint(Integer curveId, Double term, Double valuePoint) {
+        this(null, curveId, term, valuePoint);
+    }    
+
+    // Constructeur utilisé pour le test d'intégration du service.
+    public CurvePoint(Integer id, Integer curveId, Double term, Double valuePoint) {
+        this.id = id;
         this.curveId = curveId;
         this.term = term;
         this.valuePoint = valuePoint;

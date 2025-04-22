@@ -87,9 +87,16 @@ public class Bid {
     private String side;
     
     // Constructeur utilisé pour le test d'intégration du repository.
-    public Bid(String account, String type,Double bidQuantity) {
+    public Bid(String account, String type, Double bidQuantity) {
+        this(null, account, type, bidQuantity);
+    }
+    
+    // Constructeur utilisé pour le test d'intégration du service.
+    public Bid(Integer id, String account, String type,Double bidQuantity) {
+        this.id = id;
         this.account = account;
         this.type = type;
         this.bidQuantity = bidQuantity;
     }    
+    
 }

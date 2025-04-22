@@ -81,6 +81,11 @@ public class Trade {
     
     // Constructeur utilisé pour le test d'intégration du repository.
     public Trade(String account, String type, Double buyQuantity) {
+        this(null, account, type, buyQuantity);
+    }
+
+    // Constructeur utilisé pour le test d'intégration du service.
+    public Trade(Integer id, String account, String type, Double buyQuantity) {
         this.account = account;
         this.type = type;
         this.buyQuantity = buyQuantity; 
