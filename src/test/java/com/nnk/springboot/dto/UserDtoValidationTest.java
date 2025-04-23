@@ -11,10 +11,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
 
 // référence : https://www.jmdoudoux.fr/java/dej/chap-validation_donnees.htm
 public class UserDtoValidationTest {
@@ -28,61 +28,6 @@ public class UserDtoValidationTest {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
     }
-    
-    private void verifyEmptyDto(Object dto, int size) {
-        // when
-        Set<ConstraintViolation<Object>> constraintViolations = validator.validate(dto);
-
-        // then
-        assertEquals(size, constraintViolations.size()); 
-    }
-    
-    private <DTO> void verifyOthersConstraintes(DTO dto, String title) {
-        // when
-        Set<ConstraintViolation<DTO>> constraintViolations = validator.validate(dto);
-
-        // then
-        assertThat(constraintViolations).isNotEmpty();
-    
-        // on regarde si les contrôles ont bien été fait.
-        for (ConstraintViolation<DTO> constraint : constraintViolations) {
-        
-            // on récupère le nom du champ sur lequel la contrainte a échoué.
-            String field = constraint.getPropertyPath().toString();
-            // on récupère le message définit dans l'annotation de validation.
-            String message = constraint.getMessage();
-    
-            // il faut que le nom du champ correspondant à un de ceux là.
-            assertThat(field).isIn("username", "fullname", "role", "password");
-            // une contrainte sans message...
-            assertThat(message).isNotBlank();
-    
-            // constraint.getInvalidValue() = valeur du champ concerné.                
-            System.out.printf("%s : %s = '%s' : %s%n", title, field, constraint.getInvalidValue(), message);
-        }
-    }
-    
-    private <DTO> void verifLongFields(DTO dto, String title) {
-        // when
-        Set<ConstraintViolation<DTO>> constraintViolations = validator.validate(dto);
-    
-        // then
-        assertThat(constraintViolations).isNotEmpty();
-
-        for (ConstraintViolation<DTO> constraint : constraintViolations) {
-        
-            String field = constraint.getPropertyPath().toString();
-            String message = constraint.getMessage();
-    
-            assertThat(field).isIn("username", "fullname", "password");
-            if (field.equals("username") || field.equals("fullname") || field.equals("password")) {
-                assertThat(message).contains("max.length");
-            }
-    
-            System.out.printf("%s : %s = '%s' : %s%n", title, field,  constraint.getInvalidValue(), message);
-        }
-    }
-    
     @Nested
     @DisplayName("Tests de UserCreateRequestDto")
     class UserCreateRequestDtoTests {
@@ -98,7 +43,7 @@ public class UserDtoValidationTest {
             dto.setRole("USER");
 
             // when
-            // retourne une collection de violations de règles.
+            // validator.validate(dto) retourne une collection de violations de règles (Set<ConstraintViolation<UserCreateRequestDto>>)
             Set<ConstraintViolation<UserCreateRequestDto>> constraintViolations = validator.validate(dto);
             
             // then
@@ -110,7 +55,7 @@ public class UserDtoValidationTest {
         public void createDtoAllFieldsEmptyFailTest() {
             // given when then  
             // les 4 obligatoires sont : username,  fullname, password, role.
-            verifyEmptyDto(new UserCreateRequestDto(),4);
+            DtoValidationUtils.verifyEmptyDto(validator, new UserCreateRequestDto(),4);
         }
 
         @Test
@@ -128,7 +73,7 @@ public class UserDtoValidationTest {
             dto.setRole("XXX");
 
             // when then
-            verifyOthersConstraintes(dto, "Création invalide (autres contraintes)");
+            DtoValidationUtils.verifyConstraintes(validator, dto, List.of("username", "fullname", "password", "role"), "Création invalide (autres contraintes)");
         }
 
         @Test
@@ -144,7 +89,7 @@ public class UserDtoValidationTest {
             dto.setRole("ADMIN");
         
             // when then
-            verifLongFields(dto, "Création invalide (champs trop longs)");
+            DtoValidationUtils.verifyConstraintes(validator, dto, List.of("username", "fullname", "password"), "Création invalide (champs trop longs)");
         }
         
     }
@@ -172,11 +117,11 @@ public class UserDtoValidationTest {
         }
 
        @Test
-        @DisplayName("Mie à jour invalide (vide)")
+        @DisplayName("Mise à jour invalide (vide)")
         public void updateDtoAllFieldsEmptyFailTest() {
             // given when then
             // les 3 obligatoires sont : username,  fullname, role.
-            verifyEmptyDto(new UserUpdateRequestDto(),3);
+           DtoValidationUtils.verifyEmptyDto(validator, new UserUpdateRequestDto(),3);
         }
 
         @Test
@@ -191,7 +136,7 @@ public class UserDtoValidationTest {
             dto.setRole("XXX");
             
             // when then
-            verifyOthersConstraintes(dto, "Mise à jour invalide (autres contraintes)");
+            DtoValidationUtils.verifyConstraintes(validator, dto, List.of("username", "fullname", "password", "role"), "Mise à jour invalide (autres contraintes)");
         }
         
         @Test
@@ -223,7 +168,7 @@ public class UserDtoValidationTest {
             dto.setRole("ADMIN"); 
         
             // when then
-            verifLongFields(dto, "Mise à jour invalide (champs trop longs)");
+            DtoValidationUtils.verifyConstraintes(validator, dto, List.of("username", "fullname", "password"), "Mise à jour invalide (champs trop longs)");
         }
         
     }
