@@ -13,4 +13,4 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class BidCreateRequestDto extends CommonRequestBidDto{
- }
+}

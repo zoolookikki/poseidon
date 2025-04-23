@@ -7,6 +7,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.nnk.springboot.exception.EntityNotFoundException;
+
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -160,12 +162,22 @@ public abstract class AbstractCrudController<ENTITY, DTO, CREATE_DTO, UPDATE_DTO
      * @return redirect to the "list" view
      */
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Integer id) {
+//    public String delete(@PathVariable Integer id) {
+    public String delete(@PathVariable Integer id, Model model) {
+    
         log.debug("GetMapping/delete,id="+id);
         
-        deleteById(id);
+//        deleteById(id);
+//        return "redirect:/" + getEntityName() + "/list";
         
-        return "redirect:/" + getEntityName() + "/list";
+        try {
+            deleteById(id);
+            return "redirect:/" + getEntityName() + "/list";
+        } catch (EntityNotFoundException ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "error";
+        }
+        
     }
     
     // méthodes de base appelées par toutes les classes filles.
@@ -208,8 +220,15 @@ public abstract class AbstractCrudController<ENTITY, DTO, CREATE_DTO, UPDATE_DTO
             return view("update");
         }
         
-        updateEntity(id, dto);
+//        updateEntity(id, dto);
+//        return "redirect:/" + getEntityName() + "/list";
         
-        return "redirect:/" + getEntityName() + "/list";
+        try {
+            updateEntity(id, dto);
+            return "redirect:/" + getEntityName() + "/list";
+        } catch (EntityNotFoundException ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "error";
+        }
     }
 }

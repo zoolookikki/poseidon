@@ -111,8 +111,7 @@ public class UserControllerTest {
     @DisplayName("Accès à la liste des utilisateurs")
     void displayListTest() throws Exception {
         // given
-        List<UserDto> users = List.of(userDto, otherUserDto);
-        when(userService.findAll()).thenReturn(users);
+        when(userService.findAll()).thenReturn(List.of(userDto, otherUserDto));
     
         // when
         ResultActions result = mockMvc.perform(get(BASE_URL + "/list"));
@@ -123,6 +122,7 @@ public class UserControllerTest {
             .andExpect(view().name("user/list"))
             // pour être sûr que l'attibut users soit bien présent dans le model pour que Thymeleaf puisse faire le th:each.
             .andExpect(model().attributeExists("users"));
+        
         // pour être sûr que la fonction findAll a bien été appelée.
         verify(userService, times(1)).findAll();
     }
@@ -194,8 +194,9 @@ public class UserControllerTest {
         // when
         ResultActions result = performUpdateRequest(1, userUpdateDto);
         
-       // then
-       result.andExpect(redirectedUrl(REDIRECT_LIST));
+        // then
+        result.andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl(REDIRECT_LIST));
        
         verify(userService, times(1)).update(eq(1), any(UserUpdateRequestDto.class));
     }
@@ -219,7 +220,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("Suppression (/user/delete/{id})")
+    @DisplayName("Suppression d'un id (/user/delete/{id})")
     void deleteOkTest() throws Exception {
         // given
         
@@ -234,7 +235,7 @@ public class UserControllerTest {
     }    
     
     @Test
-    @DisplayName("Suppression id inexistant")
+    @DisplayName("Suppression d'un id inexistant")
     void deleteFailTest() throws Exception {
         // given
         doThrow(new EntityNotFoundException("userId 1 not found"))
