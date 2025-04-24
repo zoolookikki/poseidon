@@ -1,5 +1,6 @@
 package com.nnk.springboot.dto.bid;
 
+import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,6 +20,7 @@ public abstract class CommonRequestBidDto {
 
     @NotNull(message = "This field is required")
     @DecimalMin(value = "0.01", message = "Must be at least 0.01")
+    @DecimalMax(value = "1000000000", message = "The value must not exceed 1 billion")
     private Double bidQuantity;
     
 }

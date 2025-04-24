@@ -1,6 +1,8 @@
 package com.nnk.springboot.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -55,4 +57,12 @@ public class TradeControllerTest extends AbstractCrudControllerTest<Trade, Trade
                 .param("type",  "Type updated")
                 .param("buyQuantity", "0.02"));
     }
+    
+    @Test
+    @DisplayName("Dépassement de buyQuantity (Double trop grand)")
+    void createFailWhenBuyQuantityTooLarge() throws Exception {
+        verifyDoubleFieldTooLarge("buyQuantity", "trade/add");
+    }
+    
+    
 }

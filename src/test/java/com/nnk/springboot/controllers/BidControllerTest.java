@@ -2,6 +2,8 @@ package com.nnk.springboot.controllers;
 
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -58,4 +60,11 @@ public class BidControllerTest extends AbstractCrudControllerTest<Bid, BidDto, B
                 .param("type", "Type Test Updated")
                 .param("bidQuantity", "20"));
     }
+    
+    @Test
+    @DisplayName("Dépassement de bidQuantity (Double trop grand)")
+    void createFailWhenBidQuantityTooLarge() throws Exception {
+        verifyDoubleFieldTooLarge("bidQuantity", "bid/add");
+    }
+    
 }

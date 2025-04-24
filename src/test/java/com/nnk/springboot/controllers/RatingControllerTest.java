@@ -1,6 +1,8 @@
 package com.nnk.springboot.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -10,6 +12,9 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import com.nnk.springboot.domain.Rating;
 import com.nnk.springboot.dto.rating.RatingCreateRequestDto;
@@ -57,4 +62,23 @@ public class RatingControllerTest extends AbstractCrudControllerTest<Rating, Rat
                 .param("fitchRating", "Fitch Rating updated")
                 .param("orderNumber", "11"));
     }
+    
+    @Test
+    @DisplayName("Dépassement de orderNumber (dépassement Integer => échec de conversion du bind)")
+    void createFailWhenOrderNumberTooLarge() throws Exception {
+        // when
+        ResultActions result = mockMvc.perform(post("/rating/validate")
+                .with(csrf())
+                .param("moodysRating", "Moodys Rating")
+                .param("sandPRating",  "Sand PRating")
+                .param("fitchRating", "Fitch Rating")
+                // valeur trop grande pour un Integer
+                .param("orderNumber", "8000000000"));
+
+        // then
+        result.andExpect(status().isOk())
+              .andExpect(model().attributeHasFieldErrors("rating", "orderNumber"))
+              .andExpect(view().name("rating/add")); 
+    }
+    
 }

@@ -1,5 +1,6 @@
 package com.nnk.springboot.dto.curvePoint;
 
+import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
@@ -18,10 +19,12 @@ public abstract class CommonRequestCurvePointDto {
     @NotNull(message = "This field is required")
     // 0.10 = 1 mois, 1.00 = 1 année.
     @DecimalMin(value = "0.10", message = "Must be at least 0.10")
+    @DecimalMax(value = "100.0", message = "The value must not exceed 100")
     private Double term;
     
     @NotNull(message = "This field is required")
     @DecimalMin(value = "0.01", message = "Must be at least 0.01")
+    @DecimalMax(value = "1000000000", message = "The value must not exceed 1 billion")
     private Double valuePoint;
     
 }

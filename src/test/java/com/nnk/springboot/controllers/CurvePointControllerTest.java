@@ -1,6 +1,8 @@
 package com.nnk.springboot.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -10,6 +12,9 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import com.nnk.springboot.domain.CurvePoint;
 import com.nnk.springboot.dto.curvePoint.CurvePointCreateRequestDto;
@@ -56,4 +61,34 @@ public class CurvePointControllerTest extends AbstractCrudControllerTest<CurvePo
                 .param("term", "20")
                 .param("valuePoint", "60"));
     }
+    
+    @Test
+    @DisplayName("Dépassement de curveId (dépassement Integer => échec de conversion du bind)")
+    void createFailWhenCurveIdTooLarge() throws Exception {
+        // when
+        ResultActions result = mockMvc.perform(post("/curvePoint/validate")
+                .with(csrf())
+                // valeur trop grande pour un Integer
+                .param("curveId", "8000000000") 
+                .param("term", "10")
+                .param("valuePoint", "30"));
+
+        // then
+        result.andExpect(status().isOk())
+               // curvePoint est le nom du formulaire et curveId le champ.
+              .andExpect(model().attributeHasFieldErrors("curvePoint", "curveId"))
+              .andExpect(view().name("curvePoint/add")); // nom de la vue de formulaire
+    }
+    
+    @Test
+    @DisplayName("Dépassement de term (Double trop grand)")
+    void createFailWhenTermTooLarge() throws Exception {
+        verifyDoubleFieldTooLarge("term", "curvePoint/add");
+    }
+
+    @Test
+    @DisplayName("Dépassement de valuePoint (Double trop grand)")
+    void createFailWhenValuePointTooLarge() throws Exception {
+        verifyDoubleFieldTooLarge("valuePoint", "curvePoint/add");
+    }    
 }

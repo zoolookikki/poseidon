@@ -1,7 +1,6 @@
 package com.nnk.springboot.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.Instant;
@@ -22,12 +21,10 @@ public class Trade {
 
     // Identifiant du compte concerné 
     @Column(nullable = false, length = 30)
-    @NotBlank(message = "Account is mandatory")
     private String account;
 
     // Type de transaction (achat, vente etc...)
     @Column(nullable = false, length = 30)
-    @NotBlank(message = "Type is mandatory")
     private String type;
 
     // Quantité achetée.

@@ -16,10 +16,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+
 
 @WithMockUser(username = "user", roles = "USER")
 public abstract class AbstractCrudControllerTest<ENTITY, DTO, CREATE_DTO, UPDATE_DTO> {
@@ -47,9 +51,24 @@ public abstract class AbstractCrudControllerTest<ENTITY, DTO, CREATE_DTO, UPDATE
         return getBaseUrl("list");
     }
     
+    protected void verifyDoubleFieldTooLarge(String fieldName, String viewName) throws Exception {
+        // given
+        
+        // when
+        ResultActions result = getMockMvc().perform(post(getBaseUrl("validate"))
+                .with(csrf())
+                // valeur trop grande                
+                .param(fieldName, "1E20"));
+
+        // then
+        result.andExpect(status().isOk())
+            .andExpect(model().attributeHasFieldErrors(getEntityName(), fieldName))
+            .andExpect(view().name(viewName));
+    }
+
     @Test
     @DisplayName("Accès à la liste des entités")
-    void displayListTest() throws Exception {
+    protected void displayListTest() throws Exception {
         // given
         when((getService()).findAll()).thenReturn(List.of(getDto()));
 
@@ -65,7 +84,7 @@ public abstract class AbstractCrudControllerTest<ENTITY, DTO, CREATE_DTO, UPDATE
 
     @Test
     @DisplayName("Création d'une entité valide")
-    void createOkTest() throws Exception {
+    protected void createOkTest() throws Exception {
         // given
         when(getService().add(any())).thenReturn(getDto());
         
@@ -81,7 +100,7 @@ public abstract class AbstractCrudControllerTest<ENTITY, DTO, CREATE_DTO, UPDATE
     
     @Test
     @DisplayName("Mise à jour d'une entité valide")
-    void updateOkTest() throws Exception {
+    protected void updateOkTest() throws Exception {
         // given
         when(getService().update(eq(1), any())).thenReturn(getDto());
 
@@ -97,7 +116,7 @@ public abstract class AbstractCrudControllerTest<ENTITY, DTO, CREATE_DTO, UPDATE
     
     @Test
     @DisplayName("Suppression d’une entité")
-    void deleteOkTest() throws Exception {
+    protected void deleteOkTest() throws Exception {
         // given
         
         // when
@@ -108,4 +127,5 @@ public abstract class AbstractCrudControllerTest<ENTITY, DTO, CREATE_DTO, UPDATE
 
         verify(getService()).deleteById(1);
     }
+    
 }

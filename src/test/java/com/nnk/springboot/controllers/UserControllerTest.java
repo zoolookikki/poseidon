@@ -263,6 +263,7 @@ public class UserControllerTest {
         ResultActions result = performCreateRequest(userCreateDto);
         
         // then
+        // user est le nom du formulaire et username le champ.
         result.andExpect(model().attributeHasFieldErrors("user", "username"))
             .andExpect(view().name("user/add"));
 
