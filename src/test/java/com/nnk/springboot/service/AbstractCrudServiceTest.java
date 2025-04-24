@@ -20,6 +20,12 @@ import com.nnk.springboot.exception.EntityNotFoundException;
 import com.nnk.springboot.mapper.IMapper;
 
 
+/*
+Permet à JUnit 5 d’activer le support de Mockito dans ce test.
+Pour créer un mock avec @Mock.
+Pour injecter automatiquement ces mocks avec @InjectMocks.
+Ici Spring Boot ne gère pas les beans comme avec @SpringBootTest et @WebMvcTest => c'est un test unitaire "pur".
+*/
 @ExtendWith(MockitoExtension.class)
 public abstract class AbstractCrudServiceTest<ENTITY, DTO, CREATE_DTO, UPDATE_DTO> {
 
