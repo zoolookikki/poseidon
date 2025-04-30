@@ -10,7 +10,8 @@
     <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
         <div class="p-4 border rounded shadow-sm" style="min-width: 350px;">
             <div class="mb-3">
-                <p class="text-center fw-bold" th:text="${errorMessage}"></p>
+                <p class="text-center fw-bold" th:text="${error} + ' - ' + ${status}"></p>
+                <p class="text-center" th:text="${message}"></p>
             </div>
     
             <div class="mb-3 text-center">
